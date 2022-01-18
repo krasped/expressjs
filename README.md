@@ -1,1 +1,1 @@
-# expressjs
+# в папку react-backend установлен Express, там есть папка client в которой находится реакт приложение
