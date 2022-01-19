@@ -8,6 +8,7 @@ class App extends Component {
   state = {
     number: null,
     curPage: "DB" //addUser, DB
+    
   }
 
   got = new GotService();
@@ -24,9 +25,13 @@ class App extends Component {
     this.setState({curPage: page});
   }
 
+  saveUser(user){
+    console.log(user);
+  }
+
   render(){
     let currentPage = (this.state.curPage === "addUser") ? 
-      <AddForm page={() => this.onChangePage("DB")}/> : 
+      <AddForm page={() => this.onChangePage("DB")} saveUser={this.saveUser}/> : 
       <DBPage page={() => this.onChangePage("addUser")}/> ;
     return (
       <>
