@@ -8,8 +8,8 @@ class AddForm extends Component  {
         this.handleChangeLast = this.handleChangeLast.bind(this);
     }
     state={
-        first: null,
-        last: null
+        first: "",
+        last: ""
     };
 
     handleChangeFirst(event){
@@ -23,6 +23,13 @@ class AddForm extends Component  {
             last: event.target.value
         })
     }
+
+    clearInput(){
+        this.setState({
+            first: "",
+            last: ""
+        })
+    }
     
     render(){
         return (
@@ -30,10 +37,16 @@ class AddForm extends Component  {
                 <button onClick={this.props.page}>return to DBPage page</button>
                 <div>
                     <label>First name</label>
-                    <input type="text" placeholder='first name' onChange={this.handleChangeFirst}></input>
+                    <input type="text" 
+                        placeholder='first name' 
+                        onChange={this.handleChangeFirst}
+                        value={this.state.first}></input>
                     <label>Last name</label>
-                    <input type="text" placeholder='last name' onChange={this.handleChangeLast}></input>
-                    <button onClick={() => this.props.saveUser(this.state)}>Save</button>
+                    <input type="text" 
+                    placeholder='last name' 
+                    onChange={this.handleChangeLast}
+                    value={this.state.last}></input>
+                    <button onClick={() => {this.props.saveUser(this.state); this.clearInput()}}>Save</button>
                 </div>
                 
             </>
