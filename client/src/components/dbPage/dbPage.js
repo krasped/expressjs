@@ -1,13 +1,39 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-function DBPage (props) {
-    return (
-        <>
-            <button onClick={props.page}>return to add User page</button>
+export default class DBPage extends Component{
+    constructor(props){
+        super(props);
+        this.state = {props};
+    }
+
+    renderTable(data){ 
+        data = JSON.parse(data);
+            let res = data.map(function(item,i) {
+                return (
+                    <p key={item.id}>
+                    <span> user id: {item.id}</span>
+                    <span> first_name: {item.first_name}</span>
+                    <span> last_name: {item.last_name}</span>
+                    </p>
+                )
+            });
+        return(
             <div>
-                table
+                {res}
             </div>
-        </>
-    )
+        ) 
+    }
+
+    render(){
+        let table = (this.props.db!==null) ? this.renderTable(this.props.db) : (<>table</>);
+        return (
+            <>
+                <button onClick={this.props.page}>return to add User page</button>
+                <button onClick={this.props.update}>update table</button>
+                <div>
+                    {table}   
+                </div>
+            </>
+        )
+    }
 }
-export default DBPage;

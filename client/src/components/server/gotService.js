@@ -3,34 +3,35 @@ export default class GotService {
         this._apiBase = 'http://localhost:3000/users/';
     }
 
-    async getResource () {
-        const res = await fetch(`${this._apiBase}`);
+    async getResource (url = '') {
+        const res = await fetch(`${this._apiBase}${url}`);
         console.log(res);
+        let json = await res.json();
         if (!res.ok){
             throw new Error ("could not fetch ");// ловим ошибки 
         }
-        
-        return await res.json();
+        if(url === 'update'){
+            return JSON.stringify(json);
+        } else {
+            return json;
+        }
     }
 
-    
-
-    // async getCharacter(id) {
-    //     const character = await this.getResource(`/characters/${id}`);
-    //     return this._transformCharacter(character);               
-    // }
-
-    
-
-    // _transformCharacter(character) {
-    //     return ({
-    //         name: character.name, 
-    //         gender: character.gender, 
-    //         born: character.born, 
-    //         died: character.died, 
-    //         culture: character.culture,
-    //     })
-    // }
-    
+    postResource = async (data) => {
+        console.log(data);
+        try {
+            const response = await fetch(`${this._apiBase}`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            let json = await response.json();
+            console.log("success", JSON.stringify(json));
+        } catch (error) {
+            console.error("error: ", error);
+        }
+    }
 }
 

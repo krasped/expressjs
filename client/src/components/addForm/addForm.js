@@ -43,9 +43,9 @@ class AddForm extends Component  {
                         value={this.state.first}></input>
                     <label>Last name</label>
                     <input type="text" 
-                    placeholder='last name' 
-                    onChange={this.handleChangeLast}
-                    value={this.state.last}></input>
+                        placeholder='last name' 
+                        onChange={this.handleChangeLast}
+                        value={this.state.last}></input>
                     <button onClick={() => {this.props.saveUser(this.state); this.clearInput()}}>Save</button>
                 </div>
                 
