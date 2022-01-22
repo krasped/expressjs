@@ -6,9 +6,11 @@ const sequelize = new Sequelize("usernametable", "root", "123456qQ", {
     port: 3307
 });
 
-const model = require('./model')(sequelize);
+const user = require('./model').user(sequelize);
+const book = require('./model').book(sequelize);
 
 module.exports = {
     "sequelize": sequelize,
-    "model": model
+    "userModel": user,
+    "bookModel": book
 }

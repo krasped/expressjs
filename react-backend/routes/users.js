@@ -8,8 +8,9 @@ router.get('/', function(req, res, next) {
   res.json(Math.floor(Math.random()*100));
 });
 
-router.post('/', create);
-
-router.get('/update', update);
+router.post('/', create.user);
+router.get('/update', update.user);
+router.get('/book', create.book);
+router.post('/book',update.book);
 
 module.exports = router;

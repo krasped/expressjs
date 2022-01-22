@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 
-module.exports = function (sequelize){
+
+module.exports.user = function (sequelize){
     return sequelize.define("users", {
         id:{
             type: Sequelize.INTEGER,
@@ -14,6 +15,25 @@ module.exports = function (sequelize){
         },
         last_name:{
             type: Sequelize.STRING,
+            allowNull: false
+        }
+    },{timestamps: false});
+}
+
+module.exports.book = function (sequelize){
+    return sequelize.define("books", {
+        id:{
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+            allowNull: false
+        },
+        title:{
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        description:{
+            type: Sequelize.TEXT,
             allowNull: false
         }
     },{timestamps: false});
