@@ -32,9 +32,12 @@ class AddForm extends Component  {
     }
     
     render(){
+        const DB = "DB";
+        const book = "book";
         return (
             <>
-                <button onClick={this.props.page}>return to DBPage page</button>
+                <button onClick={() => this.props.page(DB)}>return to DBPage page</button>
+                <button onClick={() => this.props.page(book)}>return to book page</button>
                 <div>
                     <label>First name</label>
                     <input type="text" 

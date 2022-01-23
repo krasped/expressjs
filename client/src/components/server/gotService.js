@@ -17,10 +17,10 @@ export default class GotService {
         }
     }
 
-    postResource = async (data) => {
+    postResource = async (data, url = '') => {
         console.log(data);
         try {
-            const response = await fetch(`${this._apiBase}`, {
+            const response = await fetch(`${this._apiBase}${url}`, {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {

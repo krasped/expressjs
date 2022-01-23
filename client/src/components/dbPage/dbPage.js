@@ -6,7 +6,7 @@ export default class DBPage extends Component{
         this.state = {props};
     }
 
-    renderTable(data){ 
+    renderTable(data){  
         data = JSON.parse(data);
             let res = data.map(function(item,i) {
                 return (
@@ -25,10 +25,14 @@ export default class DBPage extends Component{
     }
 
     render(){
-        let table = (this.props.db!==null) ? this.renderTable(this.props.db) : (<>table</>);
+        const addUser = "addUser";
+        const book = "book";
+        console.log(this.props.db)
+        let table = (this.props.db !== null) ? this.renderTable(this.props.db) : (<>table</>);
         return (
             <>
-                <button onClick={this.props.page}>return to add User page</button>
+                <button onClick={() => this.props.page(addUser)}>return to add User page</button>
+                <button onClick={() => this.props.page(book)}>Book page</button>
                 <button onClick={this.props.update}>update table</button>
                 <div>
                     {table}   

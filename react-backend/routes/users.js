@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/', create.user);
 router.get('/update', update.user);
-router.get('/book', create.book);
-router.post('/book',update.book);
+router.post('/book', create.book);
+router.get('/book', update.book);
 
 module.exports = router;
