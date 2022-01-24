@@ -1,7 +1,7 @@
-import React, { useEffect, useState }from 'react';
-import {Typography, Button, CssBaseline,
+import React, { useState }from 'react';
+import { Button, CssBaseline,
         AppBar, Toolbar, Dialog, DialogTitle,
-        DialogContent, TextField, DialogActions } from '@mui/material';
+        DialogContent, TextField, DialogActions, TableContainer, TableHead, TableRow, Table, Paper, TableCell, TableBody } from '@mui/material';
 
 const BookPage = (props) => {
     const addUser = "addUser";
@@ -19,7 +19,9 @@ const BookPage = (props) => {
     }
     const handleAdd = (title, description) => {
         props.saveData({"title": title, "description": description}, "book");
-        handleClose();// могут быть вопросы
+        setTitle('');
+        setDescription('');
+        handleClose();
     }
 
     const handleChangeTitle = (event) =>{
@@ -34,26 +36,18 @@ const BookPage = (props) => {
         props.update();
         setTable(renderTable(props.db));
     }
-    
 
     const renderTable = (data) =>{ 
         if (!data)return;
-        console.log(data);
-        // data = JSON.parse(data);
-            let res = data.map(function(item,i) {
-                return (
-                    <p key={item.id}>
-                    <span> user id: {item.id}</span>
-                    <span> title: {item.title}</span>
-                    <span> description: {item.description}</span>
-                    </p>
-                )
-            });
-        return(
-            <div>
-                {res}
-            </div>
-        ) 
+        return data.map((row) => (
+            <TableRow
+                key={row.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell component="th" scope="row">{row.id}</TableCell>
+                <TableCell align="right">{row.title}</TableCell>
+                <TableCell align="right">{row.description}</TableCell>
+            </TableRow>
+        ));
     }
     return(
         <>
@@ -99,7 +93,18 @@ const BookPage = (props) => {
             </Dialog>
             <Button variant="outlined" onClick={updateTable}>Update books table</Button>
             <div>
-                {table}
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell align="right">title</TableCell>
+                                <TableCell align="right">description</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>{table}</TableBody> 
+                    </Table>
+                </TableContainer> 
             </div>
         </>
     )

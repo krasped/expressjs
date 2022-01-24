@@ -5,7 +5,6 @@ export default class GotService {
 
     async getResource (url = '') {
         const res = await fetch(`${this._apiBase}${url}`);
-        console.log(res);
         let json = await res.json();
         if (!res.ok){
             throw new Error ("could not fetch ");// ловим ошибки 
@@ -18,7 +17,6 @@ export default class GotService {
     }
 
     postResource = async (data, url = '') => {
-        console.log(data);
         try {
             const response = await fetch(`${this._apiBase}${url}`, {
                 method: 'POST',

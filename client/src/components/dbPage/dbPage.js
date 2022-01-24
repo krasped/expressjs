@@ -27,7 +27,6 @@ export default class DBPage extends Component{
     render(){
         const addUser = "addUser";
         const book = "book";
-        console.log(this.props.db)
         let table = (this.props.db !== null) ? this.renderTable(this.props.db) : (<>table</>);
         return (
             <>

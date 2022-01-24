@@ -15,7 +15,6 @@ class App extends Component {
   got = new GotService();
 
   async updateTable(url){
-    console.log(1);
     let dbPromise = this.got.getResource(url);
     if(url === "update"){
       await dbPromise.then(db => this.setState({db}))
