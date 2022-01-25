@@ -1,9 +1,7 @@
-export default class GotService {
-    constructor(){
-        this._apiBase = 'http://localhost:3000/users/';
-    }
+function GotService() {
+    this._apiBase = 'http://localhost:3000/users/';
 
-    async getResource (url = '') {
+    this.getResource = async function (url = '') {
         const res = await fetch(`${this._apiBase}${url}`);
         let json = await res.json();
         if (!res.ok){
@@ -16,7 +14,7 @@ export default class GotService {
         }
     }
 
-    postResource = async (data, url = '') => {
+    this.postResource = async (data, url = '') => {
         try {
             const response = await fetch(`${this._apiBase}${url}`, {
                 method: 'POST',
@@ -32,4 +30,7 @@ export default class GotService {
         }
     }
 }
+
+export default GotService;
+
 

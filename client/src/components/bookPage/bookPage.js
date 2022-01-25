@@ -1,15 +1,17 @@
 import React, { useState }from 'react';
 import { Button, CssBaseline,
         AppBar, Toolbar, Dialog, DialogTitle,
-        DialogContent, TextField, DialogActions, TableContainer, TableHead, TableRow, Table, Paper, TableCell, TableBody } from '@mui/material';
+        DialogContent, TextField, DialogActions, 
+        TableContainer, TableHead, TableRow, Table, 
+        Paper, TableCell, TableBody } from '@mui/material';
 
 const BookPage = (props) => {
     const addUser = "addUser";
-    const DB = "DB";
+    const user = "user";
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    let [table, setTable] = useState("");
+    let [table, setTable] = useState();
     
     const handleClickOpen = () => {
         setOpen(true);
@@ -54,8 +56,8 @@ const BookPage = (props) => {
             <CssBaseline/>
             <AppBar position='relative'>
                 <Toolbar>
-                    <Button variant="contained" onClick={() =>props.page(DB)}>return to DBUsers page</Button>
-                    <Button variant="contained" onClick={() => props.page(addUser)}>return to addUser page</Button>
+                    <Button variant="contained" onClick={() =>props.page(user)}>Users page</Button>
+                    <Button variant="contained" onClick={() => props.page(addUser)}>add User page</Button>
                 </Toolbar>
             </AppBar>
 
@@ -88,26 +90,24 @@ const BookPage = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={() => {handleAdd(title, description)}}>Add</Button>
+                    <Button onClick={() => {handleAdd(title, description)}}>Save</Button>
                 </DialogActions>
             </Dialog>
             <Button variant="outlined" onClick={updateTable}>Update books table</Button>
-            <div>
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell align="right">title</TableCell>
-                                <TableCell align="right">description</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>{table}</TableBody> 
-                    </Table>
-                </TableContainer> 
-            </div>
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>ID</TableCell>
+                            <TableCell align="right">title</TableCell>
+                            <TableCell align="right">description</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>{ table }</TableBody> 
+                </Table>
+            </TableContainer> 
         </>
-    )
+    );
 }
 
 export default BookPage;

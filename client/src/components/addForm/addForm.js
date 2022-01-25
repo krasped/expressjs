@@ -1,60 +1,59 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
+import { Button, CssBaseline, Container, 
+        AppBar, Toolbar, TextField} from '@mui/material';
 
-class AddForm extends Component  {
-    constructor(props){
-        super(props);
-        this.props = props;
-        this.handleChangeFirst = this.handleChangeFirst.bind(this);
-        this.handleChangeLast = this.handleChangeLast.bind(this);
-    }
-    state={
-        first: "",
-        last: ""
-    };
+export default function AddForm(props) {
+    const book = "book";
+    const user = "user";
+    const [first, setFirst] = useState("");
+    const [last, setLast] = useState("");
 
-    handleChangeFirst(event){
-        this.setState({
-            first: event.target.value
-        })
+    const handleAdd = (firstName, lastName) => {
+        props.saveData({"first": firstName, "last": lastName});
+        setFirst('');
+        setLast('');
     }
 
-    handleChangeLast(event){
-        this.setState({
-            last: event.target.value
-        })
+    const handleChangeFirst = (event) =>{
+        setFirst(event.target.value);
     }
 
-    clearInput(){
-        this.setState({
-            first: "",
-            last: ""
-        })
+    const handleChangeLast = (event) =>{
+        setLast(event.target.value);
     }
-    
-    render(){
-        const DB = "DB";
-        const book = "book";
-        return (
-            <>
-                <button onClick={() => this.props.page(DB)}>return to DBPage page</button>
-                <button onClick={() => this.props.page(book)}>return to book page</button>
-                <div>
-                    <label>First name</label>
-                    <input type="text" 
-                        placeholder='first name' 
-                        onChange={this.handleChangeFirst}
-                        value={this.state.first}></input>
-                    <label>Last name</label>
-                    <input type="text" 
-                        placeholder='last name' 
-                        onChange={this.handleChangeLast}
-                        value={this.state.last}></input>
-                    <button onClick={() => {this.props.saveUser(this.state); this.clearInput()}}>Save</button>
-                </div>
-                
-            </>
-        )
-    }
-    
+
+    return(
+        <>
+            <CssBaseline/>
+            <AppBar position='relative'>
+                <Toolbar>
+                    <Button variant="contained" onClick={() =>props.page(user)}>Users page</Button>
+                    <Button variant="contained" onClick={() => props.page(book)}>books page</Button>
+                </Toolbar>
+            </AppBar>
+            <Container maxWidth="sm">
+                <TextField
+                    onChange={handleChangeFirst}
+                    value={first}
+                    autoFocus
+                    margin='dense'
+                    label="First name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    onChange={handleChangeLast}
+                    value={last}
+                    autoFocus
+                    margin='dense'
+                    label="Last name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <Button onClick={() => {handleAdd(first, last)}}>Save</Button>
+            </Container>
+        </>
+    )  
 }
-export default AddForm;

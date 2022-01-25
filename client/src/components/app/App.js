@@ -1,76 +1,87 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css';
 import GotService from '../server';
 import DBPage from '../dbPage';
 import AddForm from '../addForm';
 import BookPage from '../bookPage';
-class App extends Component {
-  state = {
-    number: null,
-    curPage: "DB", //addUser, DB, book
-    db: null,
-    book: null // dbOfBooks
-  }
+import { Button } from '@mui/material';
 
-  got = new GotService();
 
-  async updateTable(url){
-    let dbPromise = this.got.getResource(url);
+export default function App () {
+  const [user,setUser] = useState(null);
+  const [book,setBook] = useState(null);
+  const [randomNumber, setRandomNumber] = useState(null);
+  const [curPage, setCurPage] = useState('user'); //addUser, DB, book
+  const [render, setRender] = useState(null);
+  const got = new GotService();
+  
+  const updateTable = async function(url){
+    let dbPromise = got.getResource(url);
     if(url === "update"){
-      await dbPromise.then(db => this.setState({db}))
+      await dbPromise.then(user => setUser(user))
     }else if (url ==="book") {
-      await dbPromise.then(book => this.setState({book}))
+      await dbPromise.then(book => setBook(book))
     }
   }
 
-  updateNumber(){
-    let num =  this.got.getResource();
+  const updateNumber = () => {
+    let num =  got.getResource();
     num.then((result) => {
-      this.setState({number: result }) 
-      alert(this.state.number);
+      setRandomNumber(result) ;
+      alert(randomNumber);
     })
   }
 
-  onChangePage(page){
-    console.log(page);
-    this.setState({curPage: page});
+  function onChangePage(page){
+    setCurPage(page);
   }
 
-  saveUser = (user) => { //send data to server
-    this.got.postResource(user);
+  const saveData = (data, url) => { 
+    got.postResource(data, url);
   }
 
-  saveData = (data, url) => { //send data to server
-    this.got.postResource(data, url);
-  }
-
-  render(){
-    let currentPage ;
-    if(this.state.curPage === "addUser"){
-      currentPage = <AddForm 
-        page={(page) => this.onChangePage(page)} 
-        saveUser={this.saveUser}/>
-    }else if(this.state.curPage === "DB") {
-      currentPage = <DBPage 
-        page={(page) => this.onChangePage(page)}
-        update={() => this.updateTable('update')}
-        db={this.state.db}/> ;
-    }else if (this.state.curPage === "book") {
-      currentPage = <BookPage
-        page={(page) => this.onChangePage(page)}
-        db={this.state.book}
-        saveData={this.saveData}
-        update={() => this.updateTable("book")}/>
+  const renderPage = (Page) => {
+    switch(Page){
+      case "user": 
+        setRender(
+          <DBPage 
+            page={(page) => onChangePage(page)}
+            update={() => updateTable('update')}
+            db={user}/>
+        );
+        break;
+      case "book": 
+        setRender(
+          <BookPage
+            page={(page) => onChangePage(page)}
+            db={book}
+            saveData={saveData}
+            update={() => updateTable("book")}/>
+        );
+        break;
+      case "addUser": 
+        setRender(
+          <AddForm 
+            page={(page) => onChangePage(page)} 
+            saveData={saveData}/>
+        );
+        break; 
+      default : 
+        setRender(
+          <DBPage 
+            page={(page) => onChangePage(page)}
+            update={() => updateTable('update')}
+            db={user}/>
+        );
     }
-    return (
-      <>
-        <div className="App">
-          <button className='change' onClick={() => this.updateNumber()}>download random number</button>
-        </div>
-        {currentPage}
-      </>  
-    );
   }
-}
 
-export default App;
+  useEffect(() => renderPage(curPage), [curPage, user, book]);
+
+    return(
+      <>
+        <Button variant="contained" onClick={updateNumber}>get random number</Button>
+        {render}
+      </>
+    );
+}
