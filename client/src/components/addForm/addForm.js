@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
-import { Button, CssBaseline, Container, 
-        AppBar, Toolbar, TextField} from '@mui/material';
+import { Button, TextField, Container} from '@mui/material';
 
 export default function AddForm(props) {
-    const book = "book";
-    const user = "user";
     const [first, setFirst] = useState("");
     const [last, setLast] = useState("");
 
@@ -24,13 +21,6 @@ export default function AddForm(props) {
 
     return(
         <>
-            <CssBaseline/>
-            <AppBar position='relative'>
-                <Toolbar>
-                    <Button variant="contained" onClick={() =>props.page(user)}>Users page</Button>
-                    <Button variant="contained" onClick={() => props.page(book)}>books page</Button>
-                </Toolbar>
-            </AppBar>
             <Container maxWidth="sm">
                 <TextField
                     onChange={handleChangeFirst}

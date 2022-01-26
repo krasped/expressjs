@@ -1,13 +1,10 @@
-import React, { useState }from 'react';
-import { Button, CssBaseline,
-        AppBar, Toolbar, Dialog, DialogTitle,
+import React, { useState , useEffect }from 'react';
+import { Button, Dialog, DialogTitle,
         DialogContent, TextField, DialogActions, 
         TableContainer, TableHead, TableRow, Table, 
         Paper, TableCell, TableBody } from '@mui/material';
 
 const BookPage = (props) => {
-    const addUser = "addUser";
-    const user = "user";
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -51,18 +48,15 @@ const BookPage = (props) => {
             </TableRow>
         ));
     }
+
+    useEffect(()=>{
+        updateTable();
+    },[]);
+
     return(
         <>
-            <CssBaseline/>
-            <AppBar position='relative'>
-                <Toolbar>
-                    <Button variant="contained" onClick={() =>props.page(user)}>Users page</Button>
-                    <Button variant="contained" onClick={() => props.page(addUser)}>add User page</Button>
-                </Toolbar>
-            </AppBar>
-
             <Button variant="outlined" onClick={handleClickOpen}>
-                Add book
+                add book
             </Button>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add new book</DialogTitle>
@@ -90,7 +84,7 @@ const BookPage = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={() => {handleAdd(title, description)}}>Save</Button>
+                    <Button onClick={() => {handleAdd(title, description); updateTable()}}>Save</Button>
                 </DialogActions>
             </Dialog>
             <Button variant="outlined" onClick={updateTable}>Update books table</Button>

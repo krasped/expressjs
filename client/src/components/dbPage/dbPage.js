@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { Button, CssBaseline, AppBar, Toolbar, TableContainer, 
+import React, { useEffect, useState } from 'react';
+import { Button, TableContainer, 
         TableHead, TableRow, Table, Paper, TableCell, TableBody } from '@mui/material';
 
 export default function DBPage (props) {
-    const addUser = "addUser";
-    const book = "book";
     let [table, setTable] = useState();
 
     const updateTable =  () => {
@@ -26,15 +24,12 @@ export default function DBPage (props) {
         ));
     }
 
+    useEffect(()=>{
+        updateTable();
+    },[])
+
     return(
         <>
-            <CssBaseline/>
-            <AppBar position='relative'>
-                <Toolbar>
-                    <Button variant="contained" onClick={() =>props.page(addUser)}>add User page</Button>
-                    <Button variant="contained" onClick={() => props.page(book)}>books page</Button>
-                </Toolbar>
-            </AppBar>
             <Button variant="outlined" onClick={updateTable}>Update users table</Button>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
