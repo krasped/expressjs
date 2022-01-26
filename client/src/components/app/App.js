@@ -1,25 +1,30 @@
 import React, { useState } from 'react'
 import './App.css';
 import GotService from '../server';
-import DBPage from '../dbPage';
-import AddForm from '../addForm';
-import BookPage from '../bookPage';
+import UsersPage from '../usersPage';
+import AddUserPage from '../addUserPage';
+import BookTitlePage from '../bookTitlePage';
 import Layout from '../layout';
+import BookPage from '../bookPage';
 import { Routes, Route } from "react-router-dom";
 
 
 export default function App () {
   const [user,setUser] = useState(null);
+  const [bookTitle,setBookTitle] = useState(null);
   const [book,setBook] = useState(null);
+
   const got = new GotService();
   
   const updateTable = async function(url){
     let dbPromise = got.getResource(url);
-    if(url === "update"){
+    if(url === "user"){
       await dbPromise.then(user => setUser(user))
+    }else if (url ==="bookTitle") {
+      await dbPromise.then(book => setBookTitle(book))
     }else if (url ==="book") {
       await dbPromise.then(book => setBook(book))
-    }
+    }  
   }
 
   const saveData = (data, url) => { 
@@ -31,18 +36,24 @@ export default function App () {
         <Routes>
           <Route path='/'element={<Layout/>}>
             <Route path='addUser'element={
-              <AddForm saveData={saveData}/>
+              <AddUserPage saveData={saveData}/>
+            }/>
+            <Route path='bookTitles'element={
+              <BookTitlePage
+                db={bookTitle}
+                saveData={saveData}
+                update={() => updateTable("bookTitle")}/>
+            }/>
+            <Route path='users'element={
+              <UsersPage 
+                update={() => updateTable("user")}
+                db={user}/>
             }/>
             <Route path='books'element={
               <BookPage
                 db={book}
                 saveData={saveData}
-                update={() => updateTable("book")}/>
-            }/>
-            <Route path='users'element={
-              <DBPage 
-                update={() => updateTable('update')}
-                db={user}/>
+                update={(book) => updateTable(book)}/>
             }/>
           </Route>
         </Routes>

@@ -5,7 +5,7 @@ import { Button, TableContainer,
 export default function DBPage (props) {
     let [table, setTable] = useState();
 
-    const updateTable =  () => {
+    const updateTable = () => {
         props.update();
         setTable(renderTable(props.db));
     }
@@ -18,15 +18,15 @@ export default function DBPage (props) {
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">{row.id}</TableCell>
-                <TableCell align="right">{row.first_name}</TableCell>
-                <TableCell align="right">{row.last_name}</TableCell>
+                <TableCell align="right">{row.firstName}</TableCell>
+                <TableCell align="right">{row.lastName}</TableCell>
             </TableRow>
         ));
     }
 
     useEffect(()=>{
         updateTable();
-    },[])
+    },[]);
 
     return(
         <>

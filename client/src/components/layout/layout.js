@@ -11,10 +11,13 @@ import { Button, CssBaseline, AppBar, Toolbar, Container } from '@mui/material';
                         <Link to="addUser">add User page</Link>
                     </Button>
                     <Button variant="contained">
-                        <Link to="books" color="white">books page</Link>
+                        <Link to="bookTitles" color="white">book Titles page</Link>
                     </Button>
                     <Button variant="contained">
                         <Link to="users">users page</Link>
+                    </Button>
+                    <Button variant="contained">
+                        <Link to="books">books page</Link>
                     </Button>
                 </Toolbar>
             </AppBar>

@@ -7,7 +7,7 @@ function GotService() {
         if (!res.ok){
             throw new Error ("could not fetch ");// ловим ошибки 
         }
-        if(url === 'update'){
+        if(url === 'user'){
             return JSON.stringify(json);
         } else {
             return json;

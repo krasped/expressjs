@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Button, TextField, Container} from '@mui/material';
 
-export default function AddForm(props) {
+export default function AddUserPage(props) {
     const [first, setFirst] = useState("");
     const [last, setLast] = useState("");
 
     const handleAdd = (firstName, lastName) => {
-        props.saveData({"first": firstName, "last": lastName});
+        props.saveData({"first": firstName, "last": lastName}, "user");
         setFirst('');
         setLast('');
     }
