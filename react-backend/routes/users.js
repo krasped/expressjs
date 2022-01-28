@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-
-/* GET users listing. */
 const db = require("../db/")
 
 const createBook = function(req, res) {
@@ -29,7 +27,7 @@ const createUser = function(req, res) {
 };
 
 const createBookTitle = function(req, res) {
-    db.bookTitleModel.create({
+    db.booksTitleModel.create({
     title: req.body.title,
     description: req.body.description
     }).then(res=>{
@@ -44,7 +42,7 @@ const getUser = function(req, res) {
 };
 
 const getBookTitle = function(req, res) {
-  db.bookTitleModel.findAll({raw:true}).then(books=>{
+  db.booksTitleModel.findAll({raw:true}).then(books=>{
       res.json(books);
       }).catch(err=>console.log(err));
 }; 

@@ -8,9 +8,10 @@ const sequelize = new Sequelize("usernametable", "root", "123456qQ", {
 
 const user = require('./user')(sequelize);
 const book = require('./book')(sequelize);
-const bookTitle = require('./bookTitle')(sequelize);
+const booksTitle = require('./booksTitle')(sequelize);
 
-bookTitle.hasMany(book);
+booksTitle.hasMany(book,{foreignKey: "booksTitleId"});
+
 sequelize.sync().then(result => {
     console.log("syncronyzation successful");
 }).catch(err => console.log(err));
@@ -19,5 +20,5 @@ module.exports = {
     "sequelize": sequelize,
     "userModel": user,
     "bookModel": book,
-    "bookTitleModel": bookTitle 
+    "booksTitleModel": booksTitle 
 }

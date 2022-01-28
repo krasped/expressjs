@@ -7,13 +7,16 @@ import { Button, Dialog, DialogTitle,
 
 const BookPage = (props) => {
     const [open, setOpen] = useState(false);
-    const [code, setCode] = useState("");
-    const [titleId, setTitleId] = React.useState('');
+    const [code, setCode] = useState('');
+    const [titleId, setTitleId] = React.useState(null);
     const [table, setTable] = useState();
-    
+    const [idTable, setIdTable] = useState([]);
+
     const handleChangeTitleId = (event) => {
         setTitleId(event.target.value);
     };
+
+    
 
     const handleChangeCode = (event) =>{
         setCode(event.target.value);
@@ -27,13 +30,14 @@ const BookPage = (props) => {
         setOpen(false);
     }
 
-    const handleAdd = (title, description) => {
-        props.saveData({"code": title, "description": description}, "book");
+    const handleAdd = (code, titleId) => {
+        props.saveData({"code": code, "booksTitleId": titleId}, "book");
         setCode('');
+        setTitleId(null);
         handleClose();
     }
 
-    const updateTable =  (book) => {
+    const updateTable = (book) => {
         props.update(book); //'book', 'bookTitle'
         setTable(renderTable(props.db));
     }
@@ -46,20 +50,39 @@ const BookPage = (props) => {
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">{row.id}</TableCell>
                 <TableCell align="right">{row.code}</TableCell>
-                <TableCell align="right">{row.bookTitleId}</TableCell>
+                <TableCell align="right">{row.booksTitleId}</TableCell>
             </TableRow>
         ));
     }
 
-    // useEffect(()=>{
-    //     updateTable();
-    // },[]);
+    const renderBookTitleId = (data) => {
+        if(!data)return;
+        return data.map((id) => (
+            <MenuItem key={id} value={id}>{id}</MenuItem>
+        ));
+    }
+
+    const getParentId = () => {
+        let idArray = props.parentDb.map((item)=>{
+            return item.id;
+        })
+        return (idArray);
+    }
+
+    const updateBookTitleId = () => {
+        setIdTable(renderBookTitleId(getParentId()));
+    }
+    
+
+    useEffect(()=>{
+        updateTable('book');
+    },[]);
 
     return(
         <>
             
-            <Button variant="outlined" onClick={handleClickOpen}>add book</Button>
-            <Button variant="outlined" onClick={() => updateTable('book')}>Update books table</Button>
+            <Button variant="outlined" onClick={()=>{handleClickOpen(); updateBookTitleId()} }>add book</Button>
+            <Button variant="outlined" onClick={() => {updateTable('book')}}>Update books table</Button>
 
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add new book</DialogTitle>
@@ -80,22 +103,19 @@ const BookPage = (props) => {
                             <Select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
-                                value={titleId}
+                                value={(!titleId)?"":titleId}
                                 label="Age"
                                 onChange={handleChangeTitleId}
                             >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={20}>1</MenuItem>
-                                <MenuItem value={30}>2</MenuItem>
+                                <MenuItem value=""><em>None</em></MenuItem>
+                                { idTable }
                             </Select>
                         </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={() => {handleAdd(code); updateTable("book")}}>Save</Button>
+                    <Button onClick={() => {handleAdd(code, titleId); updateTable("book")}}>Save</Button>
                 </DialogActions>
             </Dialog>
             
@@ -105,7 +125,7 @@ const BookPage = (props) => {
                         <TableRow>
                             <TableCell>ID</TableCell>
                             <TableCell align="right">Code</TableCell>
-                            <TableCell align="right">bookTitleId</TableCell>
+                            <TableCell align="right">booksTitleId</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>{ table }</TableBody> 

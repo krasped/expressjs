@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css';
 import GotService from '../server';
 import UsersPage from '../usersPage';
@@ -19,17 +19,23 @@ export default function App () {
   const updateTable = async function(url){
     let dbPromise = got.getResource(url);
     if(url === "user"){
-      await dbPromise.then(user => setUser(user))
+      await dbPromise.then(user => {setUser(user); return user});
     }else if (url ==="bookTitle") {
-      await dbPromise.then(book => setBookTitle(book))
+      await dbPromise.then(book => {setBookTitle(book); return book;})
     }else if (url ==="book") {
-      await dbPromise.then(book => setBook(book))
-    }  
+      await dbPromise.then(book => {setBook(book); return book});
+    }
   }
 
   const saveData = (data, url) => { 
     got.postResource(data, url);
   }
+
+   useEffect( ()=>{
+    updateTable("user");
+    updateTable("book");
+    updateTable("bookTitle");
+  },[]);
 
     return(
       <>
@@ -53,7 +59,8 @@ export default function App () {
               <BookPage
                 db={book}
                 saveData={saveData}
-                update={(book) => updateTable(book)}/>
+                update={(book) => updateTable(book)}
+                parentDb={bookTitle}/>
             }/>
           </Route>
         </Routes>

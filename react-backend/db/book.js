@@ -14,7 +14,6 @@ module.exports = function (sequelize){
         },
         booksTitleId:{
             type: Sequelize.INTEGER,
-            autoIncrement: false,
             allowNull: true
         }
     },{timestamps: false});

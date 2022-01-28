@@ -2,11 +2,7 @@ function GotService() {
     this._apiBase = 'http://localhost:3000/users/';
 
     this.getResource = async function (url = '') {
-        const res = await fetch(`${this._apiBase}${url}`);
-        let json = await res.json();
-        if (!res.ok){
-            throw new Error ("could not fetch ");// ловим ошибки 
-        }
+        const json = await fetch(`${this._apiBase}${url}`).then((res)=>res.json());
         if(url === 'user'){
             return JSON.stringify(json);
         } else {
