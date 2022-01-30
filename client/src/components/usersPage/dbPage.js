@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TableContainer, 
         TableHead, TableRow, Table, Paper, TableCell, TableBody } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 export default function DBPage (props) {
+
+    const user = useSelector(state => state.user.user);
+
     let [table, setTable] = useState();
 
     const updateTable = () => {
         props.update();
-        setTable(renderTable(props.db));
+        setTable(renderTable(user));
     }
 
     const renderTable = (data) =>{ 

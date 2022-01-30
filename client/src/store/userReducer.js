@@ -4,11 +4,6 @@ const defaultState = { //присваивается когда пользова�
 
 const userReducer = (state = defaultState, action) => {
     switch(action.type){
-        // case "ADD_CASH":
-        //     return{...state, cash : state.cash + action.payload}
-        // case "":
-            // case "GET_BOOK_TITLE":
-            //     return {...state.user}
             case "UPDATE_USER":
                 return{...state, user: action.payload}
             

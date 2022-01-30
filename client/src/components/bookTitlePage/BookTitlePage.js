@@ -3,8 +3,12 @@ import { Button, Dialog, DialogTitle,
         DialogContent, TextField, DialogActions, 
         TableContainer, TableHead, TableRow, Table, 
         Paper, TableCell, TableBody } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 
 const BookTitlePage = (props) => {
+
+    const bookTitle = useSelector(state => state.bookTitle.bookTitle); 
+
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -13,9 +17,11 @@ const BookTitlePage = (props) => {
     const handleClickOpen = () => {
         setOpen(true);
     }
+    
     const handleClose = () => {
         setOpen(false);
     }
+
     const handleAdd = (title, description) => {
         props.saveData({"title": title, "description": description}, "bookTitle");
         setTitle('');
@@ -33,7 +39,7 @@ const BookTitlePage = (props) => {
 
     const updateTable =  () => {
         props.update();
-        setTable(renderTable(props.db));
+        setTable(renderTable(bookTitle));
     }
 
     const renderTable = (data) =>{ 

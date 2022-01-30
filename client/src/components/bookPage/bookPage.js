@@ -4,8 +4,13 @@ import { Button, Dialog, DialogTitle,
         TableContainer, TableHead, TableRow, Table, 
         Paper, TableCell, TableBody, Box, InputLabel, 
         MenuItem, FormControl, Select } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 
 const BookPage = (props) => {
+
+    const book = useSelector(state => state.book.book);
+    const bookTitle = useSelector(state => state.bookTitle.bookTitle);
+
     const [open, setOpen] = useState(false);
     const [code, setCode] = useState('');
     const [titleId, setTitleId] = React.useState(null);
@@ -15,8 +20,6 @@ const BookPage = (props) => {
     const handleChangeTitleId = (event) => {
         setTitleId(event.target.value);
     };
-
-    
 
     const handleChangeCode = (event) =>{
         setCode(event.target.value);
@@ -37,9 +40,9 @@ const BookPage = (props) => {
         handleClose();
     }
 
-    const updateTable = (book) => {
-        props.update(book); //'book', 'bookTitle'
-        setTable(renderTable(props.db));
+    const updateTable = (bo) => {
+        props.update(bo); //'book', 'bookTitle'
+        setTable(renderTable(book));
     }
 
     const renderTable = (data) =>{ 
@@ -63,7 +66,7 @@ const BookPage = (props) => {
     }
 
     const getParentId = () => {
-        let idArray = props.parentDb.map((item)=>{
+        let idArray = bookTitle.map((item)=>{
             return item.id;
         })
         return (idArray);
