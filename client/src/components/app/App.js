@@ -7,9 +7,27 @@ import BookTitlePage from '../bookTitlePage';
 import Layout from '../layout';
 import BookPage from '../bookPage';
 import { Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'//для работы ыс redux
 
 
 export default function App () {
+
+  // const dispatch = useDispatch();
+
+  // const book = useSelector(state => state.book.book);
+  // const bookTitle = useSelector(state => state.bookTitle.bookTitle);
+  // const user = useSelector(state => state.user.user);
+
+  // const updateBook = (book) => {
+  //   dispatch({type: "UPDATE_BOOK", payload: book})
+  // }
+  // const updateUser = (user) => {
+  //   dispatch({type: "UPDATE_USER", payload: user})
+  // }
+  // const updateBookTitle = (bookTitle) => {
+  //   dispatch({type: "UPDATE_BOOK_TITLE", payload: bookTitle})
+  // }
+
   const [user,setUser] = useState(null);
   const [bookTitle,setBookTitle] = useState(null);
   const [book,setBook] = useState(null);
