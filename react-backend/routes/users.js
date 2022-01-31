@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const db = require("../db/");
 
-const createBook = function (req, res) {
+const createBook = function (req, res) {//
     db.bookModel
         .create({
             code: req.body.code,
@@ -14,7 +14,7 @@ const createBook = function (req, res) {
         .catch((err) => console.log(err));
 };
 
-const getBook = function (req, res) {
+const getBook = function (req, res) {//
     db.bookModel
         .findAll({ raw: true })
         .then((book) => {
@@ -35,7 +35,7 @@ const createUser = function (req, res) {
         .catch((err) => console.log(err));
 };
 
-const createBookTitle = function (req, res) {
+const createBookTitle = function (req, res) {//
     db.booksTitleModel
         .create({
             title: req.body.title,
@@ -56,7 +56,7 @@ const getUser = function (req, res) {
         .catch((err) => console.log(err));
 };
 
-const getBookTitle = function (req, res) {
+const getBookTitle = function (req, res) {//
     db.booksTitleModel
         .findAll({ raw: true })
         .then((books) => {
@@ -67,8 +67,8 @@ const getBookTitle = function (req, res) {
 
 router.post("/user", createUser);
 router.get("/user", getUser);
-router.post("/bookTitle", createBookTitle);
-router.get("/bookTitle", getBookTitle);
+router.post("/bookTitle", createBookTitle);//
+router.get("/bookTitle", getBookTitle);//
 router.get("/book", getBook);
 router.post("/book", createBook);
 
