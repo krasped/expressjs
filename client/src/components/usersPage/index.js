@@ -1,3 +1,4 @@
-import DBPage from "./dbPage";
+import UsersPage from "./usersPage";
 
-export default DBPage;
+export default UsersPage;
+
