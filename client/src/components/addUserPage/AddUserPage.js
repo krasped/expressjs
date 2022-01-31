@@ -1,32 +1,32 @@
-import React, { useState } from 'react'
-import { Button, TextField, Container} from '@mui/material';
+import React, { useState } from "react";
+import { Button, TextField, Container } from "@mui/material";
 
 export default function AddUserPage(props) {
     const [first, setFirst] = useState("");
     const [last, setLast] = useState("");
 
     const handleAdd = (firstName, lastName) => {
-        props.saveData({"first": firstName, "last": lastName}, "user");
-        setFirst('');
-        setLast('');
-    }
+        props.saveData({ first: firstName, last: lastName }, "user");
+        setFirst("");
+        setLast("");
+    };
 
-    const handleChangeFirst = (event) =>{
+    const handleChangeFirst = (event) => {
         setFirst(event.target.value);
-    }
+    };
 
-    const handleChangeLast = (event) =>{
+    const handleChangeLast = (event) => {
         setLast(event.target.value);
-    }
+    };
 
-    return(
+    return (
         <>
             <Container maxWidth="sm">
                 <TextField
                     onChange={handleChangeFirst}
                     value={first}
                     autoFocus
-                    margin='dense'
+                    margin="dense"
                     label="First name"
                     type="text"
                     fullWidth
@@ -36,14 +36,20 @@ export default function AddUserPage(props) {
                     onChange={handleChangeLast}
                     value={last}
                     autoFocus
-                    margin='dense'
+                    margin="dense"
                     label="Last name"
                     type="text"
                     fullWidth
                     variant="standard"
                 />
-                <Button onClick={() => {handleAdd(first, last)}}>Save</Button>
+                <Button
+                    onClick={() => {
+                        handleAdd(first, last);
+                    }}
+                >
+                    Save
+                </Button>
             </Container>
         </>
-    )  
+    );
 }

@@ -1,65 +1,66 @@
 import React, { useState , useEffect }from 'react';
-import { Button, Dialog, DialogTitle,
-        DialogContent, TextField, DialogActions, 
-        TableContainer, TableHead, TableRow, Table, 
-        Paper, TableCell, TableBody } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, TextField, 
+    DialogActions, TableContainer, TableHead, TableRow, Table, Paper, 
+    TableCell, TableBody } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 const BookTitlePage = (props) => {
-
-    const bookTitle = useSelector(state => state.bookTitle.bookTitle); 
+    const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
 
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     let [table, setTable] = useState();
-    
+
     const handleClickOpen = () => {
         setOpen(true);
-    }
-    
+    };
+
     const handleClose = () => {
         setOpen(false);
-    }
+    };
 
     const handleAdd = (title, description) => {
-        props.saveData({"title": title, "description": description}, "bookTitle");
-        setTitle('');
-        setDescription('');
+        props.saveData({ title: title, description: description }, "bookTitle");
+        setTitle("");
+        setDescription("");
         handleClose();
-    }
+    };
 
-    const handleChangeTitle = (event) =>{
+    const handleChangeTitle = (event) => {
         setTitle(event.target.value);
-    }
+    };
 
-    const handleChangeDescription = (event) =>{
+    const handleChangeDescription = (event) => {
         setDescription(event.target.value);
-    }
+    };
 
-    const updateTable =  () => {
+    const updateTable = () => {
         props.update();
         setTable(renderTable(bookTitle));
-    }
+    };
 
-    const renderTable = (data) =>{ 
-        if (!data)return;
+    const renderTable = (data) => {
+        if (!data) return;
         return data.map((row) => (
             <TableRow
                 key={row.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">{row.id}</TableCell>
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+                <TableCell component="th" scope="row">
+                    {row.id}
+                </TableCell>
                 <TableCell align="right">{row.title}</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
             </TableRow>
         ));
-    }
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
         updateTable();
-    },[]);
+    }, []);
 
-    return(
+    return (
         <>
             <Button variant="outlined" onClick={handleClickOpen}>
                 add book title
@@ -71,7 +72,7 @@ const BookTitlePage = (props) => {
                         onChange={handleChangeTitle}
                         value={title}
                         autoFocus
-                        margin='dense'
+                        margin="dense"
                         label="title"
                         type="text"
                         fullWidth
@@ -81,7 +82,7 @@ const BookTitlePage = (props) => {
                         onChange={handleChangeDescription}
                         value={description}
                         autoFocus
-                        margin='dense'
+                        margin="dense"
                         label="description"
                         type="text"
                         fullWidth
@@ -90,10 +91,19 @@ const BookTitlePage = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={() => {handleAdd(title, description); updateTable()}}>Save</Button>
+                    <Button
+                        onClick={() => {
+                            handleAdd(title, description);
+                            updateTable();
+                        }}
+                    >
+                        Save
+                    </Button>
                 </DialogActions>
             </Dialog>
-            <Button variant="outlined" onClick={updateTable}>Update books table</Button>
+            <Button variant="outlined" onClick={updateTable}>
+                Update books table
+            </Button>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -103,11 +113,11 @@ const BookTitlePage = (props) => {
                             <TableCell align="right">description</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>{ table }</TableBody> 
+                    <TableBody>{table}</TableBody>
                 </Table>
-            </TableContainer> 
+            </TableContainer>
         </>
     );
-}
+};
 
 export default BookTitlePage;
