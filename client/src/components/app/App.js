@@ -5,6 +5,8 @@ import AddUserPage from "../addUserPage";
 import BookTitlePage from "../bookTitlePage";
 import Layout from "../layout";
 import BookPage from "../bookPage";
+import LoginPage from "../loginPage";
+import AuthorPage from "../authorPage/";
 import { Routes, Route } from "react-router-dom";
 
 export default function App() {
@@ -16,8 +18,8 @@ export default function App() {
                     <Route path="bookTitles" element={<BookTitlePage />} />
                     <Route path="users" element={<UsersPage />} />
                     <Route path="books" element={<BookPage />} />
-                    {/* <Route path="login" element={<Login />} />
-                    <Route path="authors" element={<Authors />} /> */}
+                    <Route path="login" element={<LoginPage />} />
+                    <Route path="authors" element={<AuthorPage />} />
                 </Route>
             </Routes>
         </>
