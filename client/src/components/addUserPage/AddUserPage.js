@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Button, TextField, Container } from "@mui/material";
+import GotService from "../server";
 
 export default function AddUserPage(props) {
+    const got = new GotService();
     const [first, setFirst] = useState("");
     const [last, setLast] = useState("");
 
     const handleAdd = (firstName, lastName) => {
-        props.saveData({ first: firstName, last: lastName }, "user");
+        got.postResource({ first: firstName, last: lastName }, "user");
         setFirst("");
         setLast("");
     };

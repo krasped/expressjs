@@ -3,9 +3,12 @@ import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions,
     TableContainer, TableHead, TableRow, Table, Paper, TableCell, TableBody, 
     Box, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import GotService from "../server";
 
-const BookPage = (props) => {
-    const book = useSelector((state) => state.book.book);
+const BookPage = () => {
+    const got = new GotService();
+    const dispatch = useDispatch();
+    const book = useSelector((state) =>  state.book.book);
     const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
 
     const [open, setOpen] = useState(false);
@@ -31,15 +34,25 @@ const BookPage = (props) => {
     };
 
     const handleAdd = (code, titleId) => {
-        props.saveData({ code: code, booksTitleId: titleId }, "book");
+        got.postResource({ code: code, booksTitleId: titleId }, "book");
         setCode("");
         setTitleId(null);
         handleClose();
+        updateTable();
     };
 
-    const updateTable = (bo) => {
-        props.update(bo); //'book', 'bookTitle'
-        setTable(renderTable(book));
+    const updateBookTitle = async function () {
+        let dbPromise = got.getResource("bookTitle");
+        await dbPromise.then((bookTitle) => {
+            dispatch({ type: "UPDATE_BOOK_TITLE", payload: bookTitle });
+        });
+    };
+
+    const updateBook = async function () {
+        let dbPromise =  got.getResource("book");
+        await dbPromise.then((book) => {
+            dispatch({ type: "UPDATE_BOOK", payload: book });
+        });
     };
 
     const renderTable = (data) => {
@@ -56,6 +69,11 @@ const BookPage = (props) => {
                 <TableCell align="right">{row.booksTitleId}</TableCell>
             </TableRow>
         ));
+    };
+
+    const updateTable = async () => {
+        updateBook(); //'book', 'bookTitle'
+        setTable(await renderTable(book));
     };
 
     const renderBookTitleId = (data) => {
@@ -75,11 +93,12 @@ const BookPage = (props) => {
     };
 
     const updateBookTitleId = () => {
+        updateBookTitle();
         setIdTable(renderBookTitleId(getParentId()));
     };
 
     useEffect(() => {
-        updateTable("book");
+        updateTable();
     }, []);
 
     return (
@@ -96,7 +115,7 @@ const BookPage = (props) => {
             <Button
                 variant="outlined"
                 onClick={() => {
-                    updateTable("book");
+                    updateTable();
                 }}
             >
                 Update books table
@@ -140,7 +159,7 @@ const BookPage = (props) => {
                     <Button
                         onClick={() => {
                             handleAdd(code, titleId);
-                            updateTable("book");
+                            updateTable();
                         }}
                     >
                         Save
