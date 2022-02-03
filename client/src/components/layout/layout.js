@@ -21,6 +21,12 @@ export default function Layout() {
                     <Button variant="contained">
                         <Link to="books">books page</Link>
                     </Button>
+                    <Button variant="contained">
+                        <Link to="authors">authors page</Link>
+                    </Button>
+                    <Button variant="contained">
+                        <Link to="login">Login</Link>
+                    </Button>
                 </Toolbar>
             </AppBar>
             <Container>

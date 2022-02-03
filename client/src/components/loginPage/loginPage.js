@@ -1,8 +1,14 @@
-import React, { useState , useEffect }from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, TextField, 
-    DialogActions, TableContainer, TableHead, TableRow, Table, Paper, 
-    TableCell, TableBody } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import {
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    TextField,
+    DialogActions,
+    Container,
+} from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import GotService from "../server";
 
 const BookTitlePage = (props) => {
@@ -11,9 +17,10 @@ const BookTitlePage = (props) => {
     const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
 
     const [open, setOpen] = useState(false);
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    let [table, setTable] = useState();
+    const [login, setLogin] = useState("");
+    const [password, setPassword] = useState("");
+    const [registrationLogin, setRegistrationLogin] = useState("");
+    const [registrationPassword, setRegistrationPassword] = useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -24,77 +31,57 @@ const BookTitlePage = (props) => {
     };
 
     const handleAdd = (title, description) => {
-        got.postResource({ title: title, description: description }, "bookTitle");
-        setTitle("");
-        setDescription("");
+        got.postResource(
+            { title: title, description: description },
+            "bookTitle",
+        );
+        
         handleClose();
     };
 
-    const handleChangeTitle = (event) => {
-        setTitle(event.target.value);
+    const handleChangeRegistrationLogin = (event) => {
+        setRegistrationLogin(event.target.value);
     };
 
-    const handleChangeDescription = (event) => {
-        setDescription(event.target.value);
+    const handleChangeRegistrationPassword = (event) => {
+        setRegistrationPassword(event.target.value);
     };
 
-    const updateTable = () => {
-        updateBookTitle();
-        setTable(renderTable(bookTitle));
+    useEffect(() => {}, []);
+
+    const handleChangeLoginLogin = (event) => {
+        setLogin(event.target.value);
     };
 
-    const updateBookTitle = async function () {
-        let dbPromise = got.getResource("bookTitle");
-        await dbPromise.then((bookTitle) => {
-            dispatch({ type: "UPDATE_BOOK_TITLE", payload: bookTitle });
-        });
+    const handleChangeLoginPassword = (event) => {
+        setPassword(event.target.value);
     };
-
-    const renderTable = (data) => {
-        if (!data) return;
-        return data.map((row) => (
-            <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-                <TableCell component="th" scope="row">
-                    {row.id}
-                </TableCell>
-                <TableCell align="right">{row.title}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
-            </TableRow>
-        ));
-    };
-
-    useEffect(() => {
-        updateTable();
-    }, []);
 
     return (
         <>
             <Button variant="outlined" onClick={handleClickOpen}>
-                add book title
+                registration
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add new book</DialogTitle>
+                <DialogTitle>create accaunt</DialogTitle>
                 <DialogContent>
                     <TextField
-                        onChange={handleChangeTitle}
-                        value={title}
+                        onChange={handleChangeRegistrationLogin}
+                        value={registrationLogin}
                         autoFocus
                         margin="dense"
-                        label="title"
+                        label="login"
                         type="text"
                         fullWidth
                         variant="standard"
                     />
                     <TextField
-                        onChange={handleChangeDescription}
-                        value={description}
+                        onChange={handleChangeRegistrationPassword}
+                        value={registrationPassword}
                         autoFocus
                         margin="dense"
-                        label="description"
-                        type="text"
+                        label="password"
+                        type="password"
                         fullWidth
                         variant="standard"
                     />
@@ -103,29 +90,43 @@ const BookTitlePage = (props) => {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={() => {
-                            handleAdd(title, description);
-                            updateTable();
+                            handleAdd(registrationLogin, registrationPassword);
                         }}
                     >
-                        Save
+                        Create
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Button variant="outlined" onClick={updateTable}>
-                Update books table
-            </Button>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell align="right">title</TableCell>
-                            <TableCell align="right">description</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>{table}</TableBody>
-                </Table>
-            </TableContainer>
+            <Container maxWidth="sm">
+                <TextField
+                    onChange={handleChangeLoginLogin}
+                    value={login}
+                    autoFocus
+                    margin="dense"
+                    label="login"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    onChange={handleChangeLoginPassword}
+                    value={password}
+                    autoFocus
+                    margin="dense"
+                    label="password"
+                    type="password"
+                    fullWidth
+                    variant="standard"
+                />
+                <Button
+                    variant="outlined"
+                    onClick={() => {
+                        handleAdd(login, password);
+                    }}
+                >
+                    Login
+                </Button>
+            </Container>
         </>
     );
 };
