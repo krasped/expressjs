@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var cors = require("cors");
 var logger = require("morgan");
+const db = require('./db/models/index')
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -32,5 +33,6 @@ app.use("/users", usersRouter);
 app.use(function (req, res, next) {
     next(createError(404));
 });
+console.log(db.Author);
 
 module.exports = app;
