@@ -55,6 +55,8 @@ export default function UsersPage() {
                             <TableCell>ID</TableCell>
                             <TableCell align="right">Firstname</TableCell>
                             <TableCell align="right">Lastname</TableCell>
+                            <TableCell align="right">Emali</TableCell>
+                            <TableCell align="right">Password</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>{table}</TableBody>

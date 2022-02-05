@@ -8,11 +8,13 @@ import GotService from "../server";
 const BookTitlePage = (props) => {
     const got = new GotService();
     const dispatch = useDispatch();
-    const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
+    // const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
+    // const author = useSelector((state) => state.author.author);
+    const author = null;
 
     const [open, setOpen] = useState(false);
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const [first, setFirst] = useState("");
+    const [last, setLast] = useState("");
     let [table, setTable] = useState();
 
     const handleClickOpen = () => {
@@ -23,24 +25,24 @@ const BookTitlePage = (props) => {
         setOpen(false);
     };
 
-    const handleAdd = (title, description) => {
-        got.postResource({ title: title, description: description }, "bookTitle");
-        setTitle("");
-        setDescription("");
+    const handleAdd = (first, last) => {
+        got.postResource({ firstName: first, lastName: last }, "author");
+        setFirst("");
+        setLast("");
         handleClose();
     };
 
-    const handleChangeTitle = (event) => {
-        setTitle(event.target.value);
+    const handleChangeFirst = (event) => {
+        setFirst(event.target.value);
     };
 
-    const handleChangeDescription = (event) => {
-        setDescription(event.target.value);
+    const handleChangeLast = (event) => {
+        setLast(event.target.value);
     };
 
     const updateTable = () => {
         updateBookTitle();
-        setTable(renderTable(bookTitle));
+        setTable(renderTable(author));
     };
 
     const updateBookTitle = async function () {
@@ -60,8 +62,8 @@ const BookTitlePage = (props) => {
                 <TableCell component="th" scope="row">
                     {row.id}
                 </TableCell>
-                <TableCell align="right">{row.title}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
+                <TableCell align="right">{row.firstName}</TableCell>
+                <TableCell align="right">{row.lastName}</TableCell>
             </TableRow>
         ));
     };
@@ -73,27 +75,27 @@ const BookTitlePage = (props) => {
     return (
         <>
             <Button variant="outlined" onClick={handleClickOpen}>
-                add book title
+                add author
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add new book</DialogTitle>
+                <DialogTitle>Add new author</DialogTitle>
                 <DialogContent>
                     <TextField
-                        onChange={handleChangeTitle}
-                        value={title}
+                        onChange={handleChangeFirst}
+                        value={first}
                         autoFocus
                         margin="dense"
-                        label="title"
+                        label="FirstName"
                         type="text"
                         fullWidth
                         variant="standard"
                     />
                     <TextField
-                        onChange={handleChangeDescription}
-                        value={description}
+                        onChange={handleChangeLast}
+                        value={last}
                         autoFocus
                         margin="dense"
-                        label="description"
+                        label="LastName"
                         type="text"
                         fullWidth
                         variant="standard"
@@ -103,7 +105,7 @@ const BookTitlePage = (props) => {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={() => {
-                            handleAdd(title, description);
+                            handleAdd(first, last);
                             updateTable();
                         }}
                     >
@@ -112,15 +114,15 @@ const BookTitlePage = (props) => {
                 </DialogActions>
             </Dialog>
             <Button variant="outlined" onClick={updateTable}>
-                Update books table
+                Update authors table
             </Button>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell>ID</TableCell>
-                            <TableCell align="right">title</TableCell>
-                            <TableCell align="right">description</TableCell>
+                            <TableCell align="right">FirstName</TableCell>
+                            <TableCell align="right">LastName</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>{table}</TableBody>

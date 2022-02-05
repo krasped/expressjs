@@ -1,7 +1,8 @@
 import React, { useState , useEffect }from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, TextField, 
     DialogActions, TableContainer, TableHead, TableRow, Table, Paper, 
-    TableCell, TableBody } from '@mui/material';
+    TableCell, TableBody, Box, InputLabel, Select, MenuItem,
+    FormControl } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import GotService from "../server";
 
@@ -12,8 +13,10 @@ const BookTitlePage = (props) => {
 
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
+    const [authorId, setAuthorId] = useState(null)
     const [description, setDescription] = useState("");
     let [table, setTable] = useState();
+    const [idTable, setIdTable] = useState([]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -32,6 +35,10 @@ const BookTitlePage = (props) => {
 
     const handleChangeTitle = (event) => {
         setTitle(event.target.value);
+    };
+
+    const handleChangeAuthorId = (event) => {
+        setAuthorId(event.target.value);
     };
 
     const handleChangeDescription = (event) => {
@@ -98,6 +105,25 @@ const BookTitlePage = (props) => {
                         fullWidth
                         variant="standard"
                     />
+                    <Box sx={{ minWidth: 300, margin: 2 }}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-standard-label">
+                                authorId
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-standard-label"
+                                id="demo-simple-select-standard"
+                                value={!authorId ? "" : authorId}
+                                label="Age"
+                                onChange={handleChangeAuthorId}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                {idTable}
+                            </Select>
+                        </FormControl>
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
@@ -112,7 +138,7 @@ const BookTitlePage = (props) => {
                 </DialogActions>
             </Dialog>
             <Button variant="outlined" onClick={updateTable}>
-                Update books table
+                Update bookTitles table
             </Button>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -121,6 +147,7 @@ const BookTitlePage = (props) => {
                             <TableCell>ID</TableCell>
                             <TableCell align="right">title</TableCell>
                             <TableCell align="right">description</TableCell>
+                            <TableCell align="right">authorId</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>{table}</TableBody>

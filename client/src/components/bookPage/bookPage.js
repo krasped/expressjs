@@ -174,6 +174,7 @@ const BookPage = () => {
                             <TableCell>ID</TableCell>
                             <TableCell align="right">Code</TableCell>
                             <TableCell align="right">booksTitleId</TableCell>
+                            <TableCell align="right">authorsId</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>{table}</TableBody>
