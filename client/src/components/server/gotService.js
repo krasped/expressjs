@@ -5,11 +5,7 @@ function GotService() {
         const json = await fetch(`${this._apiBase}${url}`).then((res) =>
             res.json(),
         );
-        if (url === "user") {
-            return JSON.stringify(json);
-        } else {
-            return json;
-        }
+        return json;
     };
 
     this.postResource = async (data, url = "") => {

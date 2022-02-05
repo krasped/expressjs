@@ -25,7 +25,6 @@ export default function UsersPage() {
 
     const renderTable = (data) => {
         if (!data) return;
-        data = JSON.parse(data);
         return data.map((row) => (
             <TableRow
                 key={row.id}
