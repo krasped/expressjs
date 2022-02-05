@@ -1,5 +1,5 @@
 function GotService() {
-    this._apiBase = "http://localhost:3000/users/";
+    this._apiBase = "http://localhost:3000/";
 
     this.getResource = async function (url = "") {
         const json = await fetch(`${this._apiBase}${url}`).then((res) =>

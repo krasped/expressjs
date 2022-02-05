@@ -4,12 +4,12 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var cors = require("cors");
 var logger = require("morgan");
-const db = require('./db/models/index')
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-// var bookRouter = require("./routes/book");
-// var bookTitleRouter = require("./routes/bookTitle");
+var userRouter = require("./routes/user");
+var bookRouter = require("./routes/book");
+var bookTitleRouter = require("./routes/bookTitle");
+var authorRouter = require("./routes/author");
 // var loginRouter = require("./routes/login");
 // var registrationRouter = require("./routes/registration");
 
@@ -23,9 +23,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-// app.use("/book", bookRouter);
-// app.use("/bookTitle", bookTitleRouter);
+app.use("/user", userRouter);
+app.use("/book", bookRouter);
+app.use("/bookTitle", bookTitleRouter);
+app.use("/author", authorRouter);
 // app.use("/login", loginRouter);
 // app.use("/registration", registrationRouter);
 
@@ -33,6 +34,5 @@ app.use("/users", usersRouter);
 app.use(function (req, res, next) {
     next(createError(404));
 });
-console.log(db.Author);
 
 module.exports = app;

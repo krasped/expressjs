@@ -1,9 +1,9 @@
 var express = require("express");
 var router = express.Router();
-const db = require("../db/");
+const db = require("../db/models");
 
 const createBookTitle = function (req, res) {
-    db.booksTitleModel
+    db.BookTitle
         .create({
             title: req.body.title,
             description: req.body.description,
@@ -15,7 +15,7 @@ const createBookTitle = function (req, res) {
 };
 
 const getBookTitle = function (req, res) {
-    db.booksTitleModel
+    db.BookTitle
         .findAll({ raw: true })
         .then((books) => {
             res.json(books);

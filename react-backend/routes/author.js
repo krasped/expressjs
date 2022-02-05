@@ -2,11 +2,11 @@ var express = require("express");
 var router = express.Router();
 const db = require("../db/models");
 
-const createBook = function (req, res) {
-    db.Book
+const createAuthor = function (req, res) {
+    db.Author
         .create({
-            code: req.body.code,
-            booksTitleId: req.body.booksTitleId,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
         })
         .then((res) => {
             console.log(res);
@@ -14,16 +14,16 @@ const createBook = function (req, res) {
         .catch((err) => console.log(err));
 };
 
-const getBook = function (req, res) {
-    db.Book
+const getAuthor = function (req, res) {
+    db.Author
         .findAll({ raw: true })
-        .then((book) => {
-            res.json(book);
+        .then((author) => {
+            res.json(author);
         })
         .catch((err) => console.log(err));
 };
 
-router.get("/", getBook);
-router.post("/", createBook);
+router.get("/", getAuthor);
+router.post("/", createAuthor);
 
 module.exports = router;
