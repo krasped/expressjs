@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   AuthorBookTitle.init({
     authorId: DataTypes.INTEGER,
-    bookTitleID: DataTypes.INTEGER
+    bookTitleId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'AuthorBookTitle',

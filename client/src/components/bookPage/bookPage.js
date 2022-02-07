@@ -13,9 +13,10 @@ const BookPage = () => {
 
     const [open, setOpen] = useState(false);
     const [code, setCode] = useState("");
-    const [titleId, setTitleId] = React.useState(null);
+    const [titleId, setTitleId] = useState(null);
     const [table, setTable] = useState();
     const [idTable, setIdTable] = useState([]);
+    const [associations, setAssociations]= useState([]);
 
     const handleChangeTitleId = (event) => {
         setTitleId(event.target.value);
@@ -53,7 +54,24 @@ const BookPage = () => {
         await dbPromise.then((book) => {
             dispatch({ type: "UPDATE_BOOK", payload: book });
         });
+        let getAuthor = await got.getResource('book/author');
+        if(getAuthor.length > 0) {
+            setAssociations(getAuthor);
+        }
     };
+
+    const modifyData = (data, associations) => {
+        let result = data.map((book) => {
+            let newBook = book;
+            associations.forEach((item) => {
+                if(newBook.id === item.bookId){
+                    newBook.authorId = item.authorId;
+                }
+            });
+            return newBook;
+        }); 
+        return result
+    }
 
     const renderTable = (data) => {
         if (!data) return;
@@ -66,14 +84,15 @@ const BookPage = () => {
                     {row.id}
                 </TableCell>
                 <TableCell align="right">{row.code}</TableCell>
-                <TableCell align="right">{row.booksTitleId}</TableCell>
+                <TableCell align="right">{row.bookTitleId}</TableCell>
+                <TableCell align="right">{row.authorId}</TableCell>
             </TableRow>
         ));
     };
 
     const updateTable = async () => {
         updateBook(); //'book', 'bookTitle'
-        setTable(await renderTable(book));
+        setTable(await renderTable(modifyData(book, associations)));
     };
 
     const renderBookTitleId = (data) => {

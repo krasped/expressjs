@@ -2,11 +2,13 @@ var express = require("express");
 var router = express.Router();
 const db = require("../db/models");
 
-const createUser = function (req, res) {
+const registrateUser = function (req, res) {
     db.User
         .create({
             firstName: req.body.first,
             lastName: req.body.last,
+            email: req.body.email,
+            password: req.body.password
         })
         .then((res) => {
             console.log(res);
@@ -23,7 +25,7 @@ const getUser = function (req, res) {
         .catch((err) => console.log(err));
 };
 
-router.post("/", createUser);
+router.post("/", registrateUser);
 router.get("/", getUser);
 
 module.exports = router;

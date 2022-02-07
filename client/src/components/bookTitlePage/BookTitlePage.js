@@ -6,10 +6,11 @@ import { Button, Dialog, DialogTitle, DialogContent, TextField,
 import { useDispatch, useSelector } from 'react-redux';
 import GotService from "../server";
 
-const BookTitlePage = (props) => {
+const BookTitlePage = () => {
     const got = new GotService();
     const dispatch = useDispatch();
     const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
+    const author = useSelector((state) => state.author.author);
 
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
@@ -26,8 +27,16 @@ const BookTitlePage = (props) => {
         setOpen(false);
     };
 
-    const handleAdd = (title, description) => {
-        got.postResource({ title: title, description: description }, "bookTitle");
+    const handleAdd = async (title, description, authorId) => {
+        let curBookTitleId; 
+        await got.postResource({ title: title, description: description }, "bookTitle")
+            .then((result) => {
+                curBookTitleId = result.id;
+                // return console.log(result.id);
+            });
+        // got.postResource({ authorId: authorId })
+        console.log(curBookTitleId);
+        got.postResource({ authorId: authorId , bookTitleId: curBookTitleId});
         setTitle("");
         setDescription("");
         handleClose();
@@ -57,6 +66,34 @@ const BookTitlePage = (props) => {
         });
     };
 
+    const updateAuthor = async function () {
+        let dbPromise = got.getResource("author");
+        await dbPromise.then((author) => {
+            dispatch({ type: "UPDATE_AUTHOR", payload: author });
+        });
+    };
+
+    const renderAuthorId = (data) => {
+        if (!data) return;
+        return data.map((id) => (
+            <MenuItem key={id} value={id}>
+                {id}
+            </MenuItem>
+        ));
+    };
+
+    const getParentId = () => {
+        let idArray = author.map((item) => {
+            return item.id;
+        });
+        return idArray;
+    };
+
+    const updateAuthorId = () => {
+        updateAuthor();
+        setIdTable(renderAuthorId(getParentId()));
+    };
+
     const renderTable = (data) => {
         if (!data) return;
         return data.map((row) => (
@@ -79,7 +116,13 @@ const BookTitlePage = (props) => {
 
     return (
         <>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button 
+                variant="outlined" 
+                onClick={() => {
+                    handleClickOpen();
+                    updateAuthorId();
+                }}
+            >
                 add book title
             </Button>
             <Dialog open={open} onClose={handleClose}>
@@ -129,7 +172,7 @@ const BookTitlePage = (props) => {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={() => {
-                            handleAdd(title, description);
+                            handleAdd(title, description, authorId);
                             updateTable();
                         }}
                     >

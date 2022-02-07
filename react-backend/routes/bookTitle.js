@@ -7,9 +7,11 @@ const createBookTitle = function (req, res) {
         .create({
             title: req.body.title,
             description: req.body.description,
+            // authorId: req.body.authorId
         })
-        .then((res) => {
-            console.log(res);
+        .then((result) => {
+            console.log(result);
+            res.json(result)
         })
         .catch((err) => console.log(err));
 };
@@ -21,6 +23,7 @@ const getBookTitle = function (req, res) {
             res.json(books);
         })
         .catch((err) => console.log(err));
+        //добавить получение авторов если они есть
 };
 
 router.post("/", createBookTitle);

@@ -5,12 +5,10 @@ import { Button, Dialog, DialogTitle, DialogContent, TextField,
 import { useDispatch, useSelector } from 'react-redux';
 import GotService from "../server";
 
-const BookTitlePage = (props) => {
+const AuthorPage = () => {
     const got = new GotService();
     const dispatch = useDispatch();
-    // const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
-    // const author = useSelector((state) => state.author.author);
-    const author = null;
+    const author = useSelector((state) => state.author.author);
 
     const [open, setOpen] = useState(false);
     const [first, setFirst] = useState("");
@@ -41,14 +39,14 @@ const BookTitlePage = (props) => {
     };
 
     const updateTable = () => {
-        updateBookTitle();
+        updateAuthor();
         setTable(renderTable(author));
     };
 
-    const updateBookTitle = async function () {
-        let dbPromise = got.getResource("bookTitle");
-        await dbPromise.then((bookTitle) => {
-            dispatch({ type: "UPDATE_BOOK_TITLE", payload: bookTitle });
+    const updateAuthor = async function () {
+        let dbPromise = got.getResource("author");
+        await dbPromise.then((author) => {
+            dispatch({ type: "UPDATE_AUTHOR", payload: author });
         });
     };
 
@@ -132,4 +130,4 @@ const BookTitlePage = (props) => {
     );
 };
 
-export default BookTitlePage;
+export default AuthorPage;

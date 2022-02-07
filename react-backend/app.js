@@ -11,7 +11,7 @@ var bookRouter = require("./routes/book");
 var bookTitleRouter = require("./routes/bookTitle");
 var authorRouter = require("./routes/author");
 // var loginRouter = require("./routes/login");
-// var registrationRouter = require("./routes/registration");
+// var registrationRouter = require("./routes/registration"); лишнее
 
 var app = express();
 
@@ -28,7 +28,7 @@ app.use("/book", bookRouter);
 app.use("/bookTitle", bookTitleRouter);
 app.use("/author", authorRouter);
 // app.use("/login", loginRouter);
-// app.use("/registration", registrationRouter);
+// app.use("/registration", registrationRouter);лишнее
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -19,6 +19,7 @@ function GotService() {
             });
             let json = await response.json();
             console.log("success", JSON.stringify(json));
+            return json;
         } catch (error) {
             console.error("error: ", error);
         }
