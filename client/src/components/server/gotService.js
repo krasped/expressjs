@@ -1,8 +1,14 @@
 function GotService() {
     this._apiBase = "http://localhost:3000/";
 
-    this.getResource = async function (url = "") {
-        const json = await fetch(`${this._apiBase}${url}`).then((res) =>
+    this.getResource = async function (url = "", token) {
+        const json = await fetch(`${this._apiBase}${url}`, {
+            method: 'GET', 
+            headers: new Headers({
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+              })
+        }).then((res) =>
             res.json(),
         );
         return json;

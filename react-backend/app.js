@@ -4,15 +4,19 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var cors = require("cors");
 var logger = require("morgan");
+var passport = require('passport');
+var bearer =require('./strategies/bearer.js')
+
+// const initializePassport = require('./passport-config');
+// initializePassport(passport);
 
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
 var bookRouter = require("./routes/book");
 var bookTitleRouter = require("./routes/bookTitle");
-var authorRouter = require("./routes/author");
+var authorRouter = require("./routes/author");// autenticate
 var authorBookTitleRouter = require("./routes/authorBookTitle");
-// var loginRouter = require("./routes/login");
-// var registrationRouter = require("./routes/registration"); лишнее
+var loginRouter = require("./routes/login");
 
 var app = express();
 
@@ -23,13 +27,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(passport.initialize());
+// app.use(passport.session());
+
 app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/book", bookRouter);
 app.use("/bookTitle", bookTitleRouter);
-app.use("/author", authorRouter);
+app.use("/author", authorRouter);// autenticate
 app.use("/authorBookTitle", authorBookTitleRouter);
-// app.use("/login", loginRouter);
+app.use("/login", loginRouter);
 // app.use("/registration", registrationRouter);лишнее
 
 // catch 404 and forward to error handler

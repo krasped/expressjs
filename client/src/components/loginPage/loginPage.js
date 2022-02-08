@@ -68,6 +68,18 @@ const BookTitlePage = () => {
         setPassword(event.target.value);
     };
 
+    const handleLogin = async (login, password) => {
+        const getToken = await got.postResource(
+            { login: login, password: password },
+            "login",
+        );
+        if (getToken !== null){
+            localStorage.setItem('token', getToken);
+        } else localStorage.removeItem('token');
+        setLogin('');
+        setPassword('');
+    }
+
     return (
         <>
             <Button variant="outlined" onClick={handleClickOpen}>
@@ -152,7 +164,7 @@ const BookTitlePage = () => {
                 <Button
                     variant="outlined"
                     onClick={() => {
-                        handleAdd(login, password);
+                        handleLogin(login, password);
                     }}
                 >
                     Login

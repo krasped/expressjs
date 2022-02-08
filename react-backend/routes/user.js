@@ -1,6 +1,12 @@
 var express = require("express");
 var router = express.Router();
 const db = require("../db/models");
+const passport = require('passport');
+
+// var Strategy = require('passport-http-bearer').Strategy;
+
+// const initializePassport = require('../passport-config');
+// initializePassport(passport);
 
 const registrateUser = function (req, res) {
     db.User
