@@ -8,9 +8,6 @@ export default function Layout() {
             <AppBar position="relative">
                 <Toolbar>
                     <Button variant="contained">
-                        <Link to="addUser">add User page</Link>
-                    </Button>
-                    <Button variant="contained">
                         <Link to="bookTitles" color="white">
                             book Titles page
                         </Link>

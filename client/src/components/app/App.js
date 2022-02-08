@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import UsersPage from "../usersPage";
-import AddUserPage from "../addUserPage";
 import BookTitlePage from "../bookTitlePage";
 import Layout from "../layout";
 import BookPage from "../bookPage";
@@ -14,7 +13,6 @@ export default function App() {
         <>
             <Routes>
                 <Route path="/" element={<Layout />}>
-                    <Route path="addUser" element={<AddUserPage />} />
                     <Route path="bookTitles" element={<BookTitlePage />} />
                     <Route path="users" element={<UsersPage />} />
                     <Route path="books" element={<BookPage />} />

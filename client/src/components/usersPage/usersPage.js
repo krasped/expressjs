@@ -35,6 +35,8 @@ export default function UsersPage() {
                 </TableCell>
                 <TableCell align="right">{row.firstName}</TableCell>
                 <TableCell align="right">{row.lastName}</TableCell>
+                <TableCell align="right">{row.email}</TableCell>
+                <TableCell align="right">{row.password}</TableCell>
             </TableRow>
         ));
     };

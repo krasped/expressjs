@@ -11,15 +11,15 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import GotService from "../server";
 
-const BookTitlePage = (props) => {
+const BookTitlePage = () => {
     const got = new GotService();
-    const dispatch = useDispatch();
-    const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
-
     const [open, setOpen] = useState(false);
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
-    const [registrationLogin, setRegistrationLogin] = useState("");
+
+    const [registrationFirstName, setRegistrationFirstName] = useState("");
+    const [registrationLastName, setRegistrationLastName] = useState("");
+    const [registrationEmail, setRegistrationEmail] = useState("");
     const [registrationPassword, setRegistrationPassword] = useState("");
 
     const handleClickOpen = () => {
@@ -30,17 +30,28 @@ const BookTitlePage = (props) => {
         setOpen(false);
     };
 
-    const handleAdd = (title, description) => {
+    const handleAdd = (firstName, lastName, email, password) => {
         got.postResource(
-            { title: title, description: description },
-            "bookTitle",
+            { first: firstName, last: lastName, email: email, password: password },
+            "user",
         );
-        
+        setRegistrationFirstName('');
+        setRegistrationLastName('');
+        setRegistrationEmail('');
+        setRegistrationPassword('');
         handleClose();
     };
 
-    const handleChangeRegistrationLogin = (event) => {
-        setRegistrationLogin(event.target.value);
+    const handleChangeRegistrationFirastName = (event) => {
+        setRegistrationFirstName(event.target.value);
+    };
+
+    const handleChangeRegistrationLastName = (event) => {
+        setRegistrationLastName(event.target.value);
+    };
+
+    const handleChangeRegistrationEmail = (event) => {
+        setRegistrationEmail(event.target.value);
     };
 
     const handleChangeRegistrationPassword = (event) => {
@@ -66,11 +77,31 @@ const BookTitlePage = (props) => {
                 <DialogTitle>create accaunt</DialogTitle>
                 <DialogContent>
                     <TextField
-                        onChange={handleChangeRegistrationLogin}
-                        value={registrationLogin}
+                        onChange={handleChangeRegistrationFirastName}
+                        value={registrationFirstName}
                         autoFocus
                         margin="dense"
-                        label="login"
+                        label="firstName"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        onChange={handleChangeRegistrationLastName}
+                        value={registrationLastName}
+                        autoFocus
+                        margin="dense"
+                        label="Last name"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        onChange={handleChangeRegistrationEmail}
+                        value={registrationEmail}
+                        autoFocus
+                        margin="dense"
+                        label="email"
                         type="text"
                         fullWidth
                         variant="standard"
@@ -90,7 +121,7 @@ const BookTitlePage = (props) => {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={() => {
-                            handleAdd(registrationLogin, registrationPassword);
+                            handleAdd(registrationFirstName, registrationLastName, registrationEmail, registrationPassword);
                         }}
                     >
                         Create
