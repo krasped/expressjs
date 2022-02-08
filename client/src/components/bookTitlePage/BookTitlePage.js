@@ -18,6 +18,7 @@ const BookTitlePage = () => {
     const [description, setDescription] = useState("");
     let [table, setTable] = useState();
     const [idTable, setIdTable] = useState([]);
+    const [associations, setAssociations]= useState([]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -36,7 +37,7 @@ const BookTitlePage = () => {
             });
         // got.postResource({ authorId: authorId })
         console.log(curBookTitleId);
-        got.postResource({ authorId: authorId , bookTitleId: curBookTitleId});
+        got.postResource({ authorId: authorId , bookTitleId: curBookTitleId}, "authorBookTitle");
         setTitle("");
         setDescription("");
         handleClose();
@@ -54,9 +55,9 @@ const BookTitlePage = () => {
         setDescription(event.target.value);
     };
 
-    const updateTable = () => {
+    const updateTable = async () => {
         updateBookTitle();
-        setTable(renderTable(bookTitle));
+        setTable(await renderTable(modifyData(bookTitle, associations)));
     };
 
     const updateBookTitle = async function () {
@@ -64,6 +65,10 @@ const BookTitlePage = () => {
         await dbPromise.then((bookTitle) => {
             dispatch({ type: "UPDATE_BOOK_TITLE", payload: bookTitle });
         });
+        let getAuthor = await got.getResource('bookTitle/author');
+        if(getAuthor.length > 0) {
+            setAssociations(getAuthor);
+        }
     };
 
     const updateAuthor = async function () {
@@ -94,6 +99,19 @@ const BookTitlePage = () => {
         setIdTable(renderAuthorId(getParentId()));
     };
 
+    const modifyData = (data, associations) => {
+        let result = data.map((book) => {
+            let newBookTitle = book;
+            associations.forEach((item) => {
+                if(newBookTitle.id === item.bookTitleId){
+                    newBookTitle.authorId = item.authorId;
+                }
+            });
+            return newBookTitle;
+        }); 
+        return result
+    }
+
     const renderTable = (data) => {
         if (!data) return;
         return data.map((row) => (
@@ -106,6 +124,7 @@ const BookTitlePage = () => {
                 </TableCell>
                 <TableCell align="right">{row.title}</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
+                <TableCell align="right">{row.authorId}</TableCell>
             </TableRow>
         ));
     };

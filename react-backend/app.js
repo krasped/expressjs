@@ -10,6 +10,7 @@ var userRouter = require("./routes/user");
 var bookRouter = require("./routes/book");
 var bookTitleRouter = require("./routes/bookTitle");
 var authorRouter = require("./routes/author");
+var authorBookTitleRouter = require("./routes/authorBookTitle");
 // var loginRouter = require("./routes/login");
 // var registrationRouter = require("./routes/registration"); лишнее
 
@@ -27,6 +28,7 @@ app.use("/user", userRouter);
 app.use("/book", bookRouter);
 app.use("/bookTitle", bookTitleRouter);
 app.use("/author", authorRouter);
+app.use("/authorBookTitle", authorBookTitleRouter);
 // app.use("/login", loginRouter);
 // app.use("/registration", registrationRouter);лишнее
 

@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const db = require("../db/models");
+const { Op } = require("sequelize");
 
 const createBookTitle = function (req, res) {
     db.BookTitle
@@ -26,7 +27,17 @@ const getBookTitle = function (req, res) {
         //добавить получение авторов если они есть
 };
 
+const getAuthor = function (req, res) {
+    db.AuthorBookTitle.findAll({ raw: true })
+    .then((result) => {
+        console.log(result);
+        return res.json(result);
+    })
+    .catch((err) => console.log(err));
+};
+
 router.post("/", createBookTitle);
 router.get("/", getBookTitle);
+router.get("/author", getAuthor);
 
 module.exports = router;
