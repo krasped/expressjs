@@ -63,6 +63,16 @@ const AuthorPage = () => {
                 </TableCell>
                 <TableCell align="right">{row.firstName}</TableCell>
                 <TableCell align="right">{row.lastName}</TableCell>
+                <TableCell align="right">
+                    <Button variant="outlined" onClick={handleClickOpen}>
+                        delete
+                    </Button>
+                </TableCell>
+                <TableCell align="right">
+                    <Button variant="outlined" onClick={handleClickOpen}>
+                        change
+                    </Button>
+                </TableCell>
             </TableRow>
         ));
     };
