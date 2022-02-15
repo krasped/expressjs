@@ -2,7 +2,12 @@
 var express = require("express");
 var router = express.Router();
 const db = require("../db/models");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
+
+const comparePassword = (pass, hashedPassword) => {
+    return bcrypt.compareSync(pass, hashedPassword);
+}
 
 const getToken = function (req, res) {
     const login = req.body.login;
@@ -12,7 +17,7 @@ const getToken = function (req, res) {
         .then((user) => {
             let coonect = null;
             for(let i = 0; i < user.length; i++){
-                if (user[i].id == login && user[i].password === password){
+                if (user[i].id == login && comparePassword(password, user[i].password)){
                     coonect = jwt.sign({
                         data: user[i].id
                       }, 'secret');

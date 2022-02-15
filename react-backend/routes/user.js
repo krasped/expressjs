@@ -1,12 +1,12 @@
 var express = require("express");
 var router = express.Router();
 const db = require("../db/models");
-const passport = require('passport');
+const bcrypt = require('bcrypt');
 
-// var Strategy = require('passport-http-bearer').Strategy;
-
-// const initializePassport = require('../passport-config');
-// initializePassport(passport);
+const bcryptPassword = (pass) => {
+    const salt = 10;
+    return bcrypt.hashSync(pass, bcrypt.genSaltSync(salt));
+}
 
 const registrateUser = function (req, res) {
     db.User
@@ -14,7 +14,7 @@ const registrateUser = function (req, res) {
             firstName: req.body.first,
             lastName: req.body.last,
             email: req.body.email,
-            password: req.body.password
+            password: bcryptPassword(req.body.password)
         })
         .then((data) => {
             console.log(data);

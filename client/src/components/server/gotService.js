@@ -1,12 +1,16 @@
 function GotService() {
     this._apiBase = "http://localhost:3000/";
 
-    this.getResource = async function (url = "", token = null) {
+    const getUserToken = () =>{
+        return (localStorage.getItem('token'))?localStorage.getItem('token'): '';
+    }
+
+    this.getResource = async function (url = "") {
         try {
             const response = await fetch(`${this._apiBase}${url}`, {
                 method: 'GET', 
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + token,
+                    'Authorization': 'Bearer ' + getUserToken(),
                     'Content-Type': 'application/json'
                 })
             });
@@ -17,13 +21,13 @@ function GotService() {
         }
     };
 
-    this.postResource = async (url = "", data, token = null ) => {
+    this.postResource = async (url = "", data) => {
         try {
             const response = await fetch(`${this._apiBase}${url}`, {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + token,
+                    'Authorization': 'Bearer ' + getUserToken(),
                     'Content-Type': 'application/json'
                 })
             });

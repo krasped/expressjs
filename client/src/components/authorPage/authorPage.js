@@ -45,7 +45,7 @@ const AuthorPage = () => {
     // };
 
     const updateAuthor = async function () {
-        let dbPromise = await got.getResource("author", (localStorage.getItem('token'))?localStorage.getItem('token'): '');
+        let dbPromise = await got.getResource("author");
         // dispatch({ type: "UPDATE_AUTHOR", payload: dbPromise }); 
         setTable(await renderTable(dbPromise));
     };
