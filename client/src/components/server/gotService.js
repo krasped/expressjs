@@ -2,7 +2,7 @@ function GotService() {
     this._apiBase = "http://localhost:3000/";
 
     const getUserToken = () =>{
-        return (localStorage.getItem('token'))?localStorage.getItem('token'): '';
+        return (localStorage.getItem('token'))?localStorage.getItem('token'): null;
     }
 
     this.getResource = async function (url = "") {

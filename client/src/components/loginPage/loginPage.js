@@ -32,7 +32,7 @@ const LoginPage = () => {
 
     const handleAdd = (firstName, lastName, email, password) => {
         got.postResource(
-            "user",
+            "login/registration",
             { first: firstName, last: lastName, email: email, password: password }    
         );
         setRegistrationFirstName('');
@@ -73,7 +73,7 @@ const LoginPage = () => {
             "login",
             { login: login, password: password } 
         );
-        if (getToken !== null){
+        if (getToken !== undefined){
             localStorage.setItem('token', getToken);
         } else localStorage.removeItem('token');
         setLogin('');

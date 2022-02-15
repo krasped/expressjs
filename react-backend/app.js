@@ -31,13 +31,13 @@ app.use(passport.initialize());
 // app.use(passport.session());
 
 app.use("/", indexRouter);
-app.use("/user", userRouter);
-app.use("/book", bookRouter);
-app.use("/bookTitle", bookTitleRouter);
-app.use("/author", authorRouter);// autenticate
-app.use("/authorBookTitle", authorBookTitleRouter);
+app.use("/user",passport.authenticate('bearer', { session: false }), userRouter);
+app.use("/book",passport.authenticate('bearer', { session: false }), bookRouter);
+app.use("/bookTitle",passport.authenticate('bearer', { session: false }), bookTitleRouter);
+app.use("/author",passport.authenticate('bearer', { session: false }), authorRouter);// autenticate
+app.use("/authorBookTitle",passport.authenticate('bearer', { session: false }), authorBookTitleRouter);
 app.use("/login", loginRouter);
-// app.use("/registration", registrationRouter);лишнее
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
