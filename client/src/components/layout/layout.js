@@ -1,0 +1,34 @@
+import { Link, Outlet } from "react-router-dom";
+import { Button, CssBaseline, AppBar, Toolbar, Container } from "@mui/material";
+
+export default function Layout() {
+    return (
+        <>
+            <CssBaseline />
+            <AppBar position="relative">
+                <Toolbar>
+                    <Button variant="contained">
+                        <Link to="bookTitles" color="white">
+                            book Titles page
+                        </Link>
+                    </Button>
+                    <Button variant="contained">
+                        <Link to="users">users page</Link>
+                    </Button>
+                    <Button variant="contained">
+                        <Link to="books">books page</Link>
+                    </Button>
+                    <Button variant="contained">
+                        <Link to="authors">authors page</Link>
+                    </Button>
+                    <Button variant="contained">
+                        <Link to="login">Login</Link>
+                    </Button>
+                </Toolbar>
+            </AppBar>
+            <Container>
+                <Outlet />
+            </Container>
+        </>
+    );
+}

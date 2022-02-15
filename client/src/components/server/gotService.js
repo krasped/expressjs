@@ -1,36 +1,35 @@
 function GotService() {
-    this._apiBase = 'http://localhost:3000/users/';
+    this._apiBase = "http://localhost:3000/";
 
-    this.getResource = async function (url = '') {
-        const res = await fetch(`${this._apiBase}${url}`);
-        let json = await res.json();
-        if (!res.ok){
-            throw new Error ("could not fetch ");// ловим ошибки 
-        }
-        if(url === 'update'){
-            return JSON.stringify(json);
-        } else {
-            return json;
-        }
-    }
+    this.getResource = async function (url = "", token) {
+        const json = await fetch(`${this._apiBase}${url}`, {
+            method: 'GET', 
+            headers: new Headers({
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+              })
+        }).then((res) =>
+            res.json(),
+        );
+        return json;
+    };
 
-    this.postResource = async (data, url = '') => {
+    this.postResource = async (data, url = "") => {
         try {
             const response = await fetch(`${this._apiBase}${url}`, {
-                method: 'POST',
+                method: "POST",
                 body: JSON.stringify(data),
                 headers: {
-                    'Content-Type': 'application/json'
-                }
+                    "Content-Type": "application/json",
+                },
             });
             let json = await response.json();
             console.log("success", JSON.stringify(json));
+            return json;
         } catch (error) {
             console.error("error: ", error);
         }
-    }
+    };
 }
 
 export default GotService;
-
-
