@@ -9,8 +9,9 @@ const createAuthor = function (req, res) {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
         })
-        .then((res) => {
-            console.log(res);
+        .then((data) => {
+            console.log(data);
+            res.json(data);
         })
         .catch((err) => console.log(err));
 };

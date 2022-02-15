@@ -10,8 +10,9 @@ const createBook = function (req, res) {
             code: req.body.code,
             bookTitleId: req.body.booksTitleId,
         })
-        .then((res) => {
-            console.log(res);
+        .then((data) => {
+            console.log(data);
+            res.json(data);
         })
         .catch((err) => console.log(err));
 };

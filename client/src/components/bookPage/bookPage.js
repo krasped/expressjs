@@ -35,7 +35,7 @@ const BookPage = () => {
     };
 
     const handleAdd = (code, titleId) => {
-        got.postResource({ code: code, booksTitleId: titleId }, "book");
+        got.postResource("book", { code: code, booksTitleId: titleId } );
         setCode("");
         setTitleId(null);
         handleClose();

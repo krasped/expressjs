@@ -30,14 +30,14 @@ const BookTitlePage = () => {
 
     const handleAdd = async (title, description, authorId) => {
         let curBookTitleId; 
-        await got.postResource({ title: title, description: description }, "bookTitle")
+        await got.postResource("bookTitle", { title: title, description: description } )
             .then((result) => {
                 curBookTitleId = result.id;
                 // return console.log(result.id);
             });
         // got.postResource({ authorId: authorId })
         console.log(curBookTitleId);
-        got.postResource({ authorId: authorId , bookTitleId: curBookTitleId}, "authorBookTitle");
+        got.postResource("authorBookTitle", { authorId: authorId , bookTitleId: curBookTitleId} );
         setTitle("");
         setDescription("");
         handleClose();

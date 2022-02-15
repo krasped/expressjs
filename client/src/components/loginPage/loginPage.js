@@ -11,7 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import GotService from "../server";
 
-const BookTitlePage = () => {
+const LoginPage = () => {
     const got = new GotService();
     const [open, setOpen] = useState(false);
     const [login, setLogin] = useState("");
@@ -32,8 +32,8 @@ const BookTitlePage = () => {
 
     const handleAdd = (firstName, lastName, email, password) => {
         got.postResource(
-            { first: firstName, last: lastName, email: email, password: password },
             "user",
+            { first: firstName, last: lastName, email: email, password: password }    
         );
         setRegistrationFirstName('');
         setRegistrationLastName('');
@@ -70,8 +70,8 @@ const BookTitlePage = () => {
 
     const handleLogin = async (login, password) => {
         const getToken = await got.postResource(
-            { login: login, password: password },
             "login",
+            { login: login, password: password } 
         );
         if (getToken !== null){
             localStorage.setItem('token', getToken);
@@ -174,4 +174,4 @@ const BookTitlePage = () => {
     );
 };
 
-export default BookTitlePage;
+export default LoginPage;

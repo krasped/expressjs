@@ -16,8 +16,9 @@ const registrateUser = function (req, res) {
             email: req.body.email,
             password: req.body.password
         })
-        .then((res) => {
-            console.log(res);
+        .then((data) => {
+            console.log(data);
+            res.json(data);
         })
         .catch((err) => console.log(err));
 };

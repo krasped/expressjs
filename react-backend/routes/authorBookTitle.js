@@ -8,8 +8,9 @@ const createAuthorBookTitle = function (req, res) {
             authorId: req.body.authorId,
             bookTitleId: req.body.bookTitleId,
         })
-        .then((res) => {
-            console.log(res);
+        .then((data) => {
+            console.log(data);
+            res.json(data);
         })
         .catch((err) => console.log(err));
 };
