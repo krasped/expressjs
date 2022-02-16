@@ -2,34 +2,53 @@ import React, { useState , useEffect }from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, TextField, 
     DialogActions, TableContainer, TableHead, TableRow, Table, Paper, 
     TableCell, TableBody } from '@mui/material';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import GotService from "../server";
 
 const AuthorPage = () => {
     const got = new GotService();
-    // const dispatch = useDispatch();
-    // const author = useSelector((state) => state.author.author);
+    const dispatch = useDispatch();
+    const authorTable = useSelector((state) => state.author.author);
 
     const [open, setOpen] = useState(false);
     const [first, setFirst] = useState("");
     const [last, setLast] = useState("");
-    const [table, setTable] = useState([]);
+    const [message, setMesssage] = useState("add new Author");
+    const [curentId, setCurentId] = useState('');
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (message, firstField = '', secondField = '', curId = '' ) => {
+        setFirst(firstField);
+        setLast(secondField);
+        setMesssage(message);
+        setCurentId(curId);
         setOpen(true);
     };
 
     const handleClose = () => {
+        setFirst("");
+        setLast("");
+        setMesssage("");
+        setCurentId("");
         setOpen(false);
     };
 
     const handleAdd = async (first, last) => {
         await got.postResource("author", { firstName: first, lastName: last } );
         updateAuthor();
-        setFirst("");
-        setLast("");
         handleClose();
     };
+
+    const handleChange = async (id, firstName, lastName) => {
+        await got.postResource("author/change", { authorId: id, firstName: firstName, lastName: lastName } );
+        updateAuthor();
+        handleClose();
+        console.log(id);
+    }
+
+    const handleDeleteAuthor = async (id) => {
+        await got.postResource("author/delete", { authorId: id } );
+        updateAuthor();
+    }
 
     const handleChangeFirst = (event) => {
         setFirst(event.target.value);
@@ -39,15 +58,10 @@ const AuthorPage = () => {
         setLast(event.target.value);
     };
 
-    // const updateTable = async() => {
-    //     await updateAuthor();
-    //     setTable(await renderTable(author));
-    // };
-
     const updateAuthor = async function () {
         let dbPromise = await got.getResource("author");
-        // dispatch({ type: "UPDATE_AUTHOR", payload: dbPromise }); 
-        setTable(await renderTable(dbPromise));
+        let table = await renderTable(dbPromise)
+        dispatch({ type: "UPDATE_AUTHOR", payload: table });   
     };
 
     const renderTable = async (data) => {
@@ -63,12 +77,12 @@ const AuthorPage = () => {
                 <TableCell align="right">{row.firstName}</TableCell>
                 <TableCell align="right">{row.lastName}</TableCell>
                 <TableCell align="right">
-                    <Button variant="outlined" onClick={handleClickOpen}>
+                    <Button variant="outlined" onClick={() => handleDeleteAuthor(row.id)}>
                         delete
                     </Button>
                 </TableCell>
                 <TableCell align="right">
-                    <Button variant="outlined" onClick={handleClickOpen}>
+                    <Button variant="outlined" onClick={() => handleClickOpen('change author', row.firstName, row.lastName, row.id)}>
                         change
                     </Button>
                 </TableCell>
@@ -82,11 +96,11 @@ const AuthorPage = () => {
 
     return (
         <>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button variant="outlined" onClick={() => handleClickOpen('create new author')}>
                 add author
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add new author</DialogTitle>
+                <DialogTitle>{message}</DialogTitle>
                 <DialogContent>
                     <TextField
                         onChange={handleChangeFirst}
@@ -113,8 +127,7 @@ const AuthorPage = () => {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={() => {
-                            handleAdd(first, last);
-                            // updateTable();
+                            (curentId === '') ? handleAdd(first, last) : handleChange(curentId, first, last);
                         }}
                     >
                         Save
@@ -130,7 +143,7 @@ const AuthorPage = () => {
                             <TableCell align="right">LastName</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>{table}</TableBody>
+                    <TableBody>{authorTable}</TableBody>
                 </Table>
             </TableContainer>
         </>

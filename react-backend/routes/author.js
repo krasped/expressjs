@@ -25,7 +25,38 @@ const getAuthor = function (req, res) {
         .catch((err) => console.log(err));
 };
 
-router.get("/", passport.authenticate('bearer', { session: false }), getAuthor);
+const deleteAuthor = function(req, res) {
+    db.Author
+        .destroy({
+            where: {
+                id: req.body.authorId
+            }
+        })
+        .then((data) => {
+            res.json(data);
+        })
+        .catch((err) => console.log(err));
+}
+
+const changeAuthor = function(req, res) {
+    db.Author
+        .update({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+        }, {
+            where: {
+                id: req.body.authorId
+            }
+        })
+        .then((data) => {
+            res.json(data);
+        })
+        .catch((err) => console.log(err));
+}
+
+router.get("/", getAuthor);
 router.post("/", createAuthor);
+router.post("/delete", deleteAuthor);
+router.post("/change", changeAuthor);
 
 module.exports = router;
