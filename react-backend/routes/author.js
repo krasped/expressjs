@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
 const db = require("../db/models");
-const passport = require('passport');
 
 const createAuthor = function (req, res) {
     db.Author
