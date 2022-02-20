@@ -60,7 +60,7 @@ const AuthorPage = () => {
 
     const updateAuthor = async function () {
         let dbPromise = await got.getResource("author");
-        let table = await renderTable(dbPromise)
+        let table = await renderTable(dbPromise);
         dispatch({ type: "UPDATE_AUTHOR", payload: table });   
     };
 

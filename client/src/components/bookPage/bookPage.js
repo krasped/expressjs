@@ -8,15 +8,13 @@ import GotService from "../server";
 const BookPage = () => {
     const got = new GotService();
     const dispatch = useDispatch();
-    const book = useSelector((state) =>  state.book.book);
-    const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
-
+    const table = useSelector((state) =>  state.book.book);
+    const bookTitleId = useSelector((state) => state.bookTitle.bookTitleId);
     const [open, setOpen] = useState(false);
     const [code, setCode] = useState("");
     const [titleId, setTitleId] = useState(null);
-    const [table, setTable] = useState();
-    const [idTable, setIdTable] = useState([]);
-    const [associations, setAssociations]= useState([]);
+    const [curentId, setCurentId] = useState('');
+    const [message, setMesssage] = useState([]);
 
     const handleChangeTitleId = (event) => {
         setTitleId(event.target.value);
@@ -26,44 +24,50 @@ const BookPage = () => {
         setCode(event.target.value);
     };
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (message, code='', titleId='', curId='') => {
+        setCode(code);
+        setTitleId(titleId);
+        setMesssage(message);
+        setCurentId(curId);
         setOpen(true);
     };
 
     const handleClose = () => {
+        setCode('');
+        setTitleId('');
+        setMesssage('');
+        setCurentId('');
         setOpen(false);
     };
 
-    const handleAdd = (code, titleId) => {
-        got.postResource("book", { code: code, booksTitleId: titleId } );
-        setCode("");
-        setTitleId(null);
+    const handleAdd = async (code, titleId) => {
+        await got.postResource("book", { code: code, booksTitleId: titleId } );
         handleClose();
         updateTable();
     };
 
-    const updateBookTitle = async function () {
-        let dbPromise = got.getResource("bookTitle");
-        await dbPromise.then((bookTitle) => {
-            dispatch({ type: "UPDATE_BOOK_TITLE", payload: bookTitle });
-        });
+    const handleDeleteBook = async(id) =>{
+        await got.postResource("book/delete", { bookId: id } );
+        updateTable();
+    }
+
+    const handleChange = async (id, code, titleId) => {
+        await got.postResource("book/change", { bookId: id, code: code, titleId: titleId } );
+        updateTable();
+        handleClose();
+    }
+
+    const updateBookTitleId = async function () {
+        let dbPromise = await got.getResource("bookTitle/id");
+        let idTable = await renderBookTitleId(dbPromise);   
+        dispatch({ type: "UPDATE_BOOK_TITLE_ID", payload: idTable });
     };
 
-    const updateBook = async function () {
-        let dbPromise =  got.getResource("book");
-        await dbPromise.then((book) => {
-            dispatch({ type: "UPDATE_BOOK", payload: book });
-        });
+    const modifyData = async (data) => {
         let getAuthor = await got.getResource('book/author');
-        if(getAuthor.length > 0) {
-            setAssociations(getAuthor);
-        }
-    };
-
-    const modifyData = (data, associations) => {
         let result = data.map((book) => {
             let newBook = book;
-            associations.forEach((item) => {
+            getAuthor.forEach((item) => {
                 if(newBook.id === item.bookId){
                     newBook.authorId = item.authorId;
                 }
@@ -86,38 +90,41 @@ const BookPage = () => {
                 <TableCell align="right">{row.code}</TableCell>
                 <TableCell align="right">{row.bookTitleId}</TableCell>
                 <TableCell align="right">{row.authorId}</TableCell>
+                <TableCell align="right">
+                    <Button variant="outlined" onClick={() => handleDeleteBook(row.id)}>
+                        delete
+                    </Button>    
+                </TableCell>
+                <TableCell align="right">
+                    <Button variant="outlined" onClick={() => {
+                        handleClickOpen('change book', row.code, row.bookTitleId, row.id);
+                        updateBookTitleId();
+                    }}>
+                        change
+                    </Button>
+                </TableCell>
             </TableRow>
         ));
     };
 
     const updateTable = async () => {
-        updateBook(); //'book', 'bookTitle'
-        setTable(await renderTable(modifyData(book, associations)));
+        let dbPromise = await got.getResource("book");
+        let table = await renderTable(await modifyData(dbPromise));
+        dispatch({ type: "UPDATE_BOOK", payload: table });
     };
 
     const renderBookTitleId = (data) => {
         if (!data) return;
-        return data.map((id) => (
-            <MenuItem key={id} value={id}>
-                {id}
+        return data.map((item) => (
+            <MenuItem key={item.id} value={item.id}>
+                {item.id}
             </MenuItem>
         ));
     };
 
-    const getParentId = () => {
-        let idArray = bookTitle.map((item) => {
-            return item.id;
-        });
-        return idArray;
-    };
-
-    const updateBookTitleId = () => {
-        updateBookTitle();
-        setIdTable(renderBookTitleId(getParentId()));
-    };
-
     useEffect(() => {
         updateTable();
+        // updateBookTitleId();
     }, []);
 
     return (
@@ -125,30 +132,21 @@ const BookPage = () => {
             <Button
                 variant="outlined"
                 onClick={() => {
-                    handleClickOpen();
+                    handleClickOpen('create new book');
                     updateBookTitleId();
                 }}
             >
                 add book
             </Button>
-            <Button
-                variant="outlined"
-                onClick={() => {
-                    updateTable();
-                }}
-            >
-                Update books table
-            </Button>
-
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add new book</DialogTitle>
+                <DialogTitle>{message}</DialogTitle>
                 <DialogContent>
                     <TextField
                         onChange={handleChangeCode}
                         value={code}
                         autoFocus
                         margin="dense"
-                        label="title"
+                        label="code"
                         type="text"
                         fullWidth
                         variant="standard"
@@ -162,13 +160,13 @@ const BookPage = () => {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
                                 value={!titleId ? "" : titleId}
-                                label="Age"
+                                label="titleId"
                                 onChange={handleChangeTitleId}
                             >
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                {idTable}
+                                {bookTitleId}
                             </Select>
                         </FormControl>
                     </Box>
@@ -177,7 +175,7 @@ const BookPage = () => {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={() => {
-                            handleAdd(code, titleId);
+                            (curentId === '') ? handleAdd(code, titleId) : handleChange(curentId, code, titleId);
                             updateTable();
                         }}
                     >

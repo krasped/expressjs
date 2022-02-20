@@ -112,6 +112,11 @@ const BookTitlePage = () => {
         return result
     }
 
+    const handleDeleteAuthor = async (id) => {
+        await got.postResource("author/delete", { authorId: id } );
+        updateAuthor();
+    }
+
     const renderTable = (data) => {
         if (!data) return;
         return data.map((row) => (
@@ -125,6 +130,16 @@ const BookTitlePage = () => {
                 <TableCell align="right">{row.title}</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
                 <TableCell align="right">{row.authorId}</TableCell>
+                <TableCell align="right">
+                    <Button variant="outlined" onClick={() => handleDeleteAuthor(row.id)}>
+                        delete
+                    </Button>    
+                </TableCell>
+                <TableCell align="right">
+                    <Button variant="outlined" onClick={() => handleClickOpen('change author', row.firstName, row.lastName, row.id)}>
+                        change
+                    </Button>
+                </TableCell>
             </TableRow>
         ));
     };
@@ -210,6 +225,7 @@ const BookTitlePage = () => {
                             <TableCell align="right">title</TableCell>
                             <TableCell align="right">description</TableCell>
                             <TableCell align="right">authorId</TableCell>
+                            
                         </TableRow>
                     </TableHead>
                     <TableBody>{table}</TableBody>

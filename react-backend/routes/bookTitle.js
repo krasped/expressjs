@@ -24,7 +24,6 @@ const getBookTitle = function (req, res) {
             res.json(books);
         })
         .catch((err) => console.log(err));
-        //добавить получение авторов если они есть
 };
 
 const getAuthor = function (req, res) {
@@ -36,8 +35,22 @@ const getAuthor = function (req, res) {
     .catch((err) => console.log(err));
 };
 
+const getBookTitleId = function (req, res) {
+    db.BookTitle
+    .findAll({ 
+        raw: true,
+        attributes: ['id']
+    })
+    .then((id) => {
+        res.json(id);
+    })
+    .catch((err) => console.log(err));
+}
+
 router.post("/", createBookTitle);
 router.get("/", getBookTitle);
 router.get("/author", getAuthor);
+router.get("/id", getBookTitleId);
+
 
 module.exports = router;

@@ -11,7 +11,6 @@ const createBook = function (req, res) {
             bookTitleId: req.body.booksTitleId,
         })
         .then((data) => {
-            console.log(data);
             res.json(data);
         })
         .catch((err) => console.log(err));
@@ -67,13 +66,44 @@ const getAuthor = function (req, res) {
     })
     .then((result) => {
         console.log(result);
-        return res.json(result);
+        res.json(result);
     })
     .catch((err) => console.log(err));
 };
 
+const deleteBook = function (req, res) {
+    db.Book
+        .destroy({
+            where: {
+                id: req.body.bookId
+            }
+        })
+        .then((data) => {
+            res.json(data);
+        })
+        .catch((err) => console.log(err));
+}
+
+const changeBook = function (req, res) {
+    db.Book
+        .update({
+            code: req.body.code,
+            bookTitleId: req.body.titleId,
+        }, {
+            where: {
+                id: req.body.bookId
+            }
+        })
+        .then((data) => {
+            res.json(data);
+        })
+        .catch((err) => console.log(err));
+}
+
 router.get("/", getBook);
 router.get("/author", getAuthor);
 router.post("/", createBook);
+router.post("/delete", deleteBook);
+router.post("/change", changeBook);
 
 module.exports = router;
