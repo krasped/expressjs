@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 export default function Layout() {
 
     const isLoggedIn = useSelector((state) => state.autorization.isLoggedIn);
+    const email = useSelector((state) => state.autorization.userEmail);
 
     function renderButtons(isLoggedIn){
         if(isLoggedIn){
@@ -33,7 +34,7 @@ export default function Layout() {
         <>
             <CssBaseline />
             <AppBar position="relative">
-                <Toolbar>
+                <Toolbar >
                     <Box>
                     <Stack
                         direction="row"
@@ -50,6 +51,9 @@ export default function Layout() {
                             </Button>
                         </Box>
                     </Stack>
+                    </Box>
+                    <Box justifyContent="flex-end">
+                        {email?` email: ${email}`:null}
                     </Box>
                 </Toolbar>
             </AppBar>

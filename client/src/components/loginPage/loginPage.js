@@ -76,14 +76,22 @@ const LoginPage = () => {
             "login",
             { login: login, password: password } 
         );
+        const getEmail = await got.postResource(
+            "login/email",
+            { login: login, password: password } 
+        );
         if (getToken !== undefined){
             localStorage.setItem('token', getToken);
             localStorage.setItem('isLogged', true);
-            dispatch({ type: "AUTORIZATION_STATUS", payload: true });
+            localStorage.setItem('email', getEmail);
+            dispatch({ type: "AUTORIZATION_STATUS", payload: getToken });
+            dispatch({ type: "USER_EMAIL", payload: getEmail });
         } else {
             dispatch({ type: "AUTORIZATION_STATUS", payload: false });
+            dispatch({ type: "USER_EMAIL", payload: null });
             localStorage.removeItem('token');
             localStorage.removeItem('isLogged');
+            localStorage.removeItem('email');
         }
         setLogin('');
         setPassword('');

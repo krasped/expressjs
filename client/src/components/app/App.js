@@ -24,6 +24,9 @@ export default function App() {
         dispatch({ 
         type: "AUTORIZATION_STATUS", 
         payload: (localStorage.getItem('isLogged'))?localStorage.getItem('isLogged'): false });
+        dispatch({ 
+        type: "USER_EMAIL", 
+        payload: (localStorage.getItem('email'))?localStorage.getItem('email'): false });
     },[isLoggedIn]);
 
     return (

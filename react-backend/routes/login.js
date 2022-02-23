@@ -20,7 +20,7 @@ const getToken = function (req, res) {
     db.User
         .findAll({ raw: true })
         .then((user) => {
-            let coonect ;
+            let coonect;
             for(let i = 0; i < user.length; i++){
                 if (user[i].id == login && comparePassword(password, user[i].password)){
                     coonect = jwt.sign({
@@ -53,8 +53,27 @@ const getLogin = function (req, res) {
     res.json('redirect');
 }
 
+const getEmail = function (req, res) {
+    const login = req.body.login;
+    const password = req.body.password;
+    db.User
+        .findAll({ raw: true })
+        .then((user) => {
+            let email;
+            for(let i = 0; i < user.length; i++){
+                if (user[i].id == login && comparePassword(password, user[i].password)){
+                    email = user[i].email;
+                    break;
+                }
+            }
+            res.json(email);
+        })
+        .catch((err) => console.log(err));
+};
+
 router.post("/registration", registrateUser);
 router.post("/", getToken);
 router.get("/", getLogin);
+router.post("/email", getEmail);
 
 module.exports = router;
