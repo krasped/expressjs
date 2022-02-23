@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux';
+
 import {
     Button,
     Dialog,
@@ -8,10 +10,11 @@ import {
     DialogActions,
     Container,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+
 import GotService from "../server";
 
 const LoginPage = () => {
+    const dispatch = useDispatch();
     const got = new GotService();
     const [open, setOpen] = useState(false);
     const [login, setLogin] = useState("");
@@ -74,8 +77,14 @@ const LoginPage = () => {
             { login: login, password: password } 
         );
         if (getToken !== undefined){
-            localStorage.setItem('token', getToken);
-        } else localStorage.removeItem('token');
+            localStorage.setItem('token', getToken.token);
+            localStorage.setItem('isLogged', getToken.isLogged);
+            dispatch({ type: "AUTORIZATION_STATUS", payload: getToken.isLogged });
+        } else {
+            dispatch({ type: "AUTORIZATION_STATUS", payload: false });
+            localStorage.removeItem('token');
+            localStorage.removeItem('isLogged');
+        }
         setLogin('');
         setPassword('');
     }

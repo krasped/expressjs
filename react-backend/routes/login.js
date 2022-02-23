@@ -20,12 +20,16 @@ const getToken = function (req, res) {
     db.User
         .findAll({ raw: true })
         .then((user) => {
-            let coonect = '';
+            let coonect = {
+                token:'',
+                isLogged: false
+            };
             for(let i = 0; i < user.length; i++){
                 if (user[i].id == login && comparePassword(password, user[i].password)){
-                    coonect = jwt.sign({
-                        data: user[i].id
-                      }, 'secret');
+                    coonect.token = jwt.sign({
+                            data: user[i].id
+                        }, 'secret');
+                    coonect.isLogged = true;
                     break;
                 }
             }
@@ -49,7 +53,12 @@ const registrateUser = function (req, res) {
         .catch((err) => console.log(err));
 };
 
+const getLogin = function (req, res) {
+    res.json('redirect');
+}
+
 router.post("/registration", registrateUser);
 router.post("/", getToken);
+router.get("/", getLogin);
 
 module.exports = router;

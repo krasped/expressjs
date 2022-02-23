@@ -31,11 +31,11 @@ app.use(passport.initialize());
 // app.use(passport.session());
 
 app.use("/", indexRouter);
-app.use("/user",passport.authenticate('bearer', { session: false }), userRouter);
-app.use("/book",passport.authenticate('bearer', { session: false }), bookRouter);
-app.use("/bookTitle",passport.authenticate('bearer', { session: false }), bookTitleRouter);
-app.use("/author",passport.authenticate('bearer', { session: false }), authorRouter);// autenticate
-app.use("/authorBookTitle",passport.authenticate('bearer', { session: false }), authorBookTitleRouter);
+app.use("/user",passport.authenticate('bearer', {failureRedirect: '/login', session: false, failureMessage: true }), userRouter);
+app.use("/book",passport.authenticate('bearer', {failureRedirect: '/login', session: false, failureMessage: true }), bookRouter);
+app.use("/bookTitle",passport.authenticate('bearer', {failureRedirect: '/login', session: false, failureMessage: true }), bookTitleRouter);
+app.use("/author",passport.authenticate('bearer', {failureRedirect: '/login', session: false, failureMessage: true }), authorRouter);// autenticate
+app.use("/authorBookTitle",passport.authenticate('bearer', {failureRedirect: "/login", session: false, failureMessage: true }), authorBookTitleRouter);
 app.use("/login", loginRouter);
 
 
