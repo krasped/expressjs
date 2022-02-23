@@ -20,16 +20,12 @@ const getToken = function (req, res) {
     db.User
         .findAll({ raw: true })
         .then((user) => {
-            let coonect = {
-                token:'',
-                isLogged: false
-            };
+            let coonect ;
             for(let i = 0; i < user.length; i++){
                 if (user[i].id == login && comparePassword(password, user[i].password)){
-                    coonect.token = jwt.sign({
+                    coonect = jwt.sign({
                             data: user[i].id
                         }, 'secret');
-                    coonect.isLogged = true;
                     break;
                 }
             }

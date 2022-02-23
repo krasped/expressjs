@@ -1,7 +1,6 @@
-import { useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 import {Stack, Button, CssBaseline, AppBar, Toolbar, Container , Box } from "@mui/material";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function Layout() {
 
@@ -29,10 +28,7 @@ export default function Layout() {
             )
         } else return null;
     }
-// useEffect(() => {
-//     console.log(isLoggedIn);
-//     renderButtons(isLoggedIn);
-// },[])
+
     return (
         <>
             <CssBaseline />

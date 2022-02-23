@@ -77,9 +77,9 @@ const LoginPage = () => {
             { login: login, password: password } 
         );
         if (getToken !== undefined){
-            localStorage.setItem('token', getToken.token);
-            localStorage.setItem('isLogged', getToken.isLogged);
-            dispatch({ type: "AUTORIZATION_STATUS", payload: getToken.isLogged });
+            localStorage.setItem('token', getToken);
+            localStorage.setItem('isLogged', true);
+            dispatch({ type: "AUTORIZATION_STATUS", payload: true });
         } else {
             dispatch({ type: "AUTORIZATION_STATUS", payload: false });
             localStorage.removeItem('token');

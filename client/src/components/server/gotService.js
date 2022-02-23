@@ -2,6 +2,12 @@
 function GotService() {
     this._apiBase = "http://localhost:3000/";
 
+    const logout = (responce) => {
+        if (responce === 'redirect'){
+            localStorage.removeItem('isLogged');
+        }
+    }
+
     const getUserToken = () =>{
         return (localStorage.getItem('token'))?localStorage.getItem('token'): '';
     }
@@ -16,6 +22,7 @@ function GotService() {
                 })
             });
             let json = await response.json();
+            logout(json);
             return json;
         } catch (error) {
             console.error("error: ", error);

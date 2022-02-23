@@ -12,12 +12,9 @@ import { useDispatch } from 'react-redux';
 
 export default function App() {
     const dispatch = useDispatch();
-    let isLoggedIn = localStorage.getItem('isLogged');
     
-    function isLogined (isLogged, children) {
-        console.log(typeof isLogged);
-        if(!isLogged){
-            console.log('ok');
+    function isLogined (children) {
+        if(!localStorage.getItem('isLogged')){
             return <Navigate to='/login' replace />;
         } else return children;
     }
@@ -32,12 +29,12 @@ export default function App() {
         <>
             <Routes>
                 <Route element={<Layout />}>
-                    {/* <Route path="/" element={<PublicPage />} /> */}
+                    <Route path="/" element={<PublicPage />} />
                     <Route path="login" element={<LoginPage />} /> 
-                    <Route path="bookTitles" element={isLogined( isLoggedIn, <BookTitlePage />)} />  
-                    <Route path="users" element={isLogined( isLoggedIn, <UsersPage />)} />
-                    <Route path="books" element={isLogined( isLoggedIn, <BookPage />)} />
-                    <Route path="authors" element={isLogined( isLoggedIn, <AuthorPage />)} />
+                    <Route path="bookTitles" element={isLogined( <BookTitlePage />)} />  
+                    <Route path="/users" element={isLogined( <UsersPage />)} />
+                    <Route path="books" element={isLogined( <BookPage />)} />
+                    <Route path="authors" element={isLogined( <AuthorPage />)} />
                     <Route path="*" element={<LoginPage />} />  
                 </Route>
             </Routes>
