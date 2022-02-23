@@ -9,22 +9,32 @@ import GotService from "../server";
 const BookTitlePage = () => {
     const got = new GotService();
     const dispatch = useDispatch();
-    const bookTitle = useSelector((state) => state.bookTitle.bookTitle);
-    const author = useSelector((state) => state.author.author);
+    const table = useSelector((state) => state.bookTitle.bookTitle);
+    const authorIdTable = useSelector((state) => state.author.authorId);
 
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [authorId, setAuthorId] = useState(null)
     const [description, setDescription] = useState("");
-    let [table, setTable] = useState();
-    const [idTable, setIdTable] = useState([]);
-    const [associations, setAssociations]= useState([]);
+    const [message, setMesssage] = useState('');
+    const [curentId, setCurentId] = useState('');
+    const [prevAuthorId, setPrevAuthorId] = useState(null);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (message, title='', description='', curId='', prevAuthorId = null) => {
+        setTitle(title);
+        setDescription(description);
+        setMesssage(message);
+        setCurentId(curId);
+        setPrevAuthorId(prevAuthorId);
         setOpen(true);
     };
 
     const handleClose = () => {
+        setTitle('');
+        setDescription('');
+        setMesssage('');
+        setCurentId('');
+        setPrevAuthorId(null);
         setOpen(false);
     };
 
@@ -33,15 +43,29 @@ const BookTitlePage = () => {
         await got.postResource("bookTitle", { title: title, description: description } )
             .then((result) => {
                 curBookTitleId = result.id;
-                // return console.log(result.id);
             });
         // got.postResource({ authorId: authorId })
-        console.log(curBookTitleId);
-        got.postResource("authorBookTitle", { authorId: authorId , bookTitleId: curBookTitleId} );
-        setTitle("");
-        setDescription("");
+        if (authorId!==null){
+            await got.postResource("authorBookTitle", { authorId: authorId , bookTitleId: curBookTitleId} );
+        }
+        updateBookTitle();
         handleClose();
     };
+
+    const handleChange = async (curId, title, description, authorId, prevAuthorId) => { 
+        if(prevAuthorId===null && authorId!==null){
+            await got.postResource("authorBookTitle", { authorId: authorId , bookTitleId: curId} );
+        }
+        if(prevAuthorId!==null && authorId===null){
+            await got.postResource("authorBookTitle/delete", { authorId: prevAuthorId, bookTitleId: curId} );
+        }
+        if(prevAuthorId!==null && authorId!==null){
+            await got.postResource("authorBookTitle/change", { authorId: authorId, prevAuthorId: prevAuthorId, bookTitleId: curId} );
+        }
+        await got.postResource("bookTitle/change", { bookTitleId: curId, title: title, description: description } )
+        updateBookTitle();
+        handleClose();
+    }
 
     const handleChangeTitle = (event) => {
         setTitle(event.target.value);
@@ -55,54 +79,33 @@ const BookTitlePage = () => {
         setDescription(event.target.value);
     };
 
-    const updateTable = async () => {
-        updateBookTitle();
-        setTable(await renderTable(modifyData(bookTitle, associations)));
-    };
-
     const updateBookTitle = async function () {
-        let dbPromise = got.getResource("bookTitle");
-        await dbPromise.then((bookTitle) => {
-            dispatch({ type: "UPDATE_BOOK_TITLE", payload: bookTitle });
-        });
-        let getAuthor = await got.getResource('bookTitle/author');
-        if(getAuthor.length > 0) {
-            setAssociations(getAuthor);
-        }
+        let dbPromise = await got.getResource("bookTitle");
+        let table = await renderTable(await modifyData(dbPromise))
+        dispatch({ type: "UPDATE_BOOK_TITLE", payload: table });  
     };
 
-    const updateAuthor = async function () {
-        let dbPromise = got.getResource("author");
-        await dbPromise.then((author) => {
-            dispatch({ type: "UPDATE_AUTHOR", payload: author });
-        });
+    const updateAuthorId = async function () {
+        let dbPromise = await got.getResource("author/id");
+        let idTable = await renderAuthorId(dbPromise);
+            dispatch({ type: "UPDATE_AUTHOR_ID", payload: idTable });
+       
     };
 
     const renderAuthorId = (data) => {
         if (!data) return;
-        return data.map((id) => (
-            <MenuItem key={id} value={id}>
-                {id}
+        return data.map((item) => (
+            <MenuItem key={item.id} value={item.id}>
+                {item.id}
             </MenuItem>
         ));
     };
 
-    const getParentId = () => {
-        let idArray = author.map((item) => {
-            return item.id;
-        });
-        return idArray;
-    };
-
-    const updateAuthorId = () => {
-        updateAuthor();
-        setIdTable(renderAuthorId(getParentId()));
-    };
-
-    const modifyData = (data, associations) => {
+    const modifyData = async (data) => {
+        let getAuthor = await got.getResource('authorBookTitle');
         let result = data.map((book) => {
             let newBookTitle = book;
-            associations.forEach((item) => {
+            getAuthor.forEach((item) => {
                 if(newBookTitle.id === item.bookTitleId){
                     newBookTitle.authorId = item.authorId;
                 }
@@ -112,9 +115,14 @@ const BookTitlePage = () => {
         return result
     }
 
-    const handleDeleteAuthor = async (id) => {
-        await got.postResource("author/delete", { authorId: id } );
-        updateAuthor();
+    const handleDeleteBookTitle = async (id, prevAuthorId) => {
+        if(prevAuthorId){
+            console.log('123', prevAuthorId);
+            await got.postResource("authorBookTitle/delete", { prevAuthorId: prevAuthorId, bookTitleId: id} );
+        }
+        await got.postResource("bookTitle/delete", { bookTitleId: id } );
+        
+        updateBookTitle();
     }
 
     const renderTable = (data) => {
@@ -131,12 +139,15 @@ const BookTitlePage = () => {
                 <TableCell align="right">{row.description}</TableCell>
                 <TableCell align="right">{row.authorId}</TableCell>
                 <TableCell align="right">
-                    <Button variant="outlined" onClick={() => handleDeleteAuthor(row.id)}>
+                    <Button variant="outlined" onClick={() => handleDeleteBookTitle(row.id, row.authorId)}>
                         delete
                     </Button>    
                 </TableCell>
                 <TableCell align="right">
-                    <Button variant="outlined" onClick={() => handleClickOpen('change author', row.firstName, row.lastName, row.id)}>
+                    <Button variant="outlined" onClick={() => {
+                        handleClickOpen('change bookTitle', row.title, row.description, row.id, row.authorId);
+                        updateAuthorId();
+                    }}>
                         change
                     </Button>
                 </TableCell>
@@ -145,7 +156,7 @@ const BookTitlePage = () => {
     };
 
     useEffect(() => {
-        updateTable();
+        updateBookTitle();
     }, []);
 
     return (
@@ -153,14 +164,15 @@ const BookTitlePage = () => {
             <Button 
                 variant="outlined" 
                 onClick={() => {
-                    handleClickOpen();
+                    handleClickOpen("new bookTitle");
+                    updateBookTitle();
                     updateAuthorId();
                 }}
             >
                 add book title
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add new book</DialogTitle>
+                <DialogTitle>{message}</DialogTitle>
                 <DialogContent>
                     <TextField
                         onChange={handleChangeTitle}
@@ -191,13 +203,13 @@ const BookTitlePage = () => {
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
                                 value={!authorId ? "" : authorId}
-                                label="Age"
+                                label="authorId"
                                 onChange={handleChangeAuthorId}
                             >
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                {idTable}
+                                {authorIdTable}
                             </Select>
                         </FormControl>
                     </Box>
@@ -206,17 +218,16 @@ const BookTitlePage = () => {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={() => {
-                            handleAdd(title, description, authorId);
-                            updateTable();
+                            (curentId === '') ? 
+                            handleAdd(title, description, authorId) : 
+                            handleChange(curentId, title, description, authorId, prevAuthorId);
+                            
                         }}
                     >
                         Save
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Button variant="outlined" onClick={updateTable}>
-                Update bookTitles table
-            </Button>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>

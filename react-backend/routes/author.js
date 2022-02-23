@@ -24,6 +24,18 @@ const getAuthor = function (req, res) {
         .catch((err) => console.log(err));
 };
 
+const getAuthorId = function (req, res) {
+    db.Author
+        .findAll({ 
+            raw: true,
+            attributes: ['id']
+        })
+        .then((author) => {
+            res.json(author);
+        })
+        .catch((err) => console.log(err));
+};
+
 const deleteAuthor = function(req, res) {
     db.Author
         .destroy({
@@ -54,6 +66,7 @@ const changeAuthor = function(req, res) {
 }
 
 router.get("/", getAuthor);
+router.get("/id", getAuthorId);
 router.post("/", createAuthor);
 router.post("/delete", deleteAuthor);
 router.post("/change", changeAuthor);

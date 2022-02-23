@@ -47,10 +47,41 @@ const getBookTitleId = function (req, res) {
     .catch((err) => console.log(err));
 }
 
+const deleteBookTitle = function (req, res) {
+    db.BookTitle
+        .destroy({
+            where: {
+                id: req.body.bookTitleId
+            }
+        })
+        .then((data) => {
+            res.json(data);
+        })
+        .catch((err) => console.log(err));
+}
+
+const changeBookTitle = function (req, res) {
+    db.BookTitle
+        .update({
+            title: req.body.title,
+            description: req.body.description,
+        }, {
+            where: {
+                id: req.body.bookTitleId
+            }
+        })
+        .then((data) => {
+            res.json(data);
+        })
+        .catch((err) => console.log(err));
+}
+
 router.post("/", createBookTitle);
 router.get("/", getBookTitle);
 router.get("/author", getAuthor);
 router.get("/id", getBookTitleId);
+router.post("/delete", deleteBookTitle);
+router.post("/change", changeBookTitle);
 
 
 module.exports = router;

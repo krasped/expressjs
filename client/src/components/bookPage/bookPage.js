@@ -43,7 +43,6 @@ const BookPage = () => {
     const handleAdd = async (code, titleId) => {
         await got.postResource("book", { code: code, booksTitleId: titleId } );
         handleClose();
-        updateTable();
     };
 
     const handleDeleteBook = async(id) =>{
@@ -53,7 +52,6 @@ const BookPage = () => {
 
     const handleChange = async (id, code, titleId) => {
         await got.postResource("book/change", { bookId: id, code: code, titleId: titleId } );
-        updateTable();
         handleClose();
     }
 
