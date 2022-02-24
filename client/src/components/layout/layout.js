@@ -10,7 +10,7 @@ export default function Layout() {
     function renderButtons(isLoggedIn){
         if(isLoggedIn){
             return(
-                <Box>
+                <Box sx={{ flexGrow: 1 }}>
                     <Button variant="contained">
                     <Link to="bookTitles" color="white">
                         book Titles page
@@ -33,9 +33,9 @@ export default function Layout() {
     return (
         <>
             <CssBaseline />
-            <AppBar position="relative">
+            <AppBar position="static">
                 <Toolbar >
-                    <Box>
+                    <Box sx={{flexGrow: 1, ml: 2 }}>
                     <Stack
                         direction="row"
                         justifyContent="space-between"
@@ -44,7 +44,7 @@ export default function Layout() {
                     >
                         {renderButtons(isLoggedIn)}
                         <Box
-                            justifyContent="flex-end"
+                            sx={{ mr: 'auto' }}
                         >
                             <Button variant="contained">
                                 <Link to="login">Login</Link>
@@ -52,7 +52,7 @@ export default function Layout() {
                         </Box>
                     </Stack>
                     </Box>
-                    <Box justifyContent="flex-end">
+                    <Box sx={{ p: 1 ,ml: 'auto' }}>
                         {email?` email: ${email}`:null}
                     </Box>
                 </Toolbar>
