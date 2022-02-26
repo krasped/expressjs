@@ -2,7 +2,7 @@ import React, { useState , useEffect }from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, TextField, 
     DialogActions, TableContainer, TableHead, TableRow, Table, Paper, 
     TableCell, TableBody, Box, InputLabel, Select, MenuItem,
-    FormControl } from '@mui/material';
+    FormControl, Avatar } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import GotService from "../server";
 
@@ -125,6 +125,12 @@ const BookTitlePage = () => {
         updateBookTitle();
     }
 
+    const renderBookCover = (path) => {
+        return (
+            <Avatar alt="Cover" src="../img/common_book_cover.jpg" />
+        )
+    }
+
     const renderTable = (data) => {
         if (!data) return;
         return data.map((row) => (
@@ -138,6 +144,7 @@ const BookTitlePage = () => {
                 <TableCell align="right">{row.title}</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
                 <TableCell align="right">{row.authorId}</TableCell>
+                <TableCell align="right">{renderBookCover()}</TableCell>
                 <TableCell align="right">
                     <Button variant="outlined" onClick={() => handleDeleteBookTitle(row.id, row.authorId)}>
                         delete
