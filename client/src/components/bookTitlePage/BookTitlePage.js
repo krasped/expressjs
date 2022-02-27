@@ -7,15 +7,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import GotService from "../server";
 
 const BookTitlePage = () => {
+    const img = require('../../img/common_book_cover.jpg');
     const got = new GotService();
     const dispatch = useDispatch();
     const table = useSelector((state) => state.bookTitle.bookTitle);
     const authorIdTable = useSelector((state) => state.author.authorId);
+    const covers = useSelector((state)=> state.cover.covers)
 
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [authorId, setAuthorId] = useState(null)
     const [description, setDescription] = useState("");
+    const [cover, setCover] = useState('');
     const [message, setMesssage] = useState('');
     const [curentId, setCurentId] = useState('');
     const [prevAuthorId, setPrevAuthorId] = useState(null);
@@ -35,10 +38,11 @@ const BookTitlePage = () => {
         setMesssage('');
         setCurentId('');
         setPrevAuthorId(null);
+        setCover('');
         setOpen(false);
     };
 
-    const handleAdd = async (title, description, authorId) => {
+    const handleAdd = async (title, description, authorId, cover) => {
         let curBookTitleId; 
         await got.postResource("bookTitle", { title: title, description: description } )
             .then((result) => {
@@ -48,11 +52,13 @@ const BookTitlePage = () => {
         if (authorId!==null){
             await got.postResource("authorBookTitle", { authorId: authorId , bookTitleId: curBookTitleId} );
         }
+
+        dispatch({type: 'UPDATE_COVERS', payload: {id: curentId, src: cover}});
         updateBookTitle();
         handleClose();
     };
 
-    const handleChange = async (curId, title, description, authorId, prevAuthorId) => { 
+    const handleChange = async (curId, title, description, authorId, prevAuthorId, cover) => { 
         if(prevAuthorId===null && authorId!==null){
             await got.postResource("authorBookTitle", { authorId: authorId , bookTitleId: curId} );
         }
@@ -63,6 +69,8 @@ const BookTitlePage = () => {
             await got.postResource("authorBookTitle/change", { authorId: authorId, prevAuthorId: prevAuthorId, bookTitleId: curId} );
         }
         await got.postResource("bookTitle/change", { bookTitleId: curId, title: title, description: description } )
+        console.log('111111111', covers);
+        dispatch({type: 'UPDATE_COVERS', payload: {id: curId, src: cover}});
         updateBookTitle();
         handleClose();
     }
@@ -77,6 +85,23 @@ const BookTitlePage = () => {
 
     const handleChangeDescription = (event) => {
         setDescription(event.target.value);
+    };
+
+    const handleChangeCover = (event, curId) => {
+        if(!event) {return} ;
+
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(){
+            return function(e) {
+                setCover(e.target.result)
+                
+                console.log('hell');
+            }
+        }();
+
+        reader.readAsDataURL(file);
     };
 
     const updateBookTitle = async function () {
@@ -125,9 +150,13 @@ const BookTitlePage = () => {
         updateBookTitle();
     }
 
-    const renderBookCover = (path) => {
+    const renderBookCover = (curId, covers) => {
+        let img = covers.find((item) => item.id == curId);
+        if (!img){
+            img = '';
+        }
         return (
-            <Avatar alt="Cover" src="../img/common_book_cover.jpg" />
+            <Avatar alt="Cover" variant="square" src = {img.src} ></Avatar>
         )
     }
 
@@ -138,13 +167,14 @@ const BookTitlePage = () => {
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
+                <TableCell align="right">{renderBookCover(row.id, covers)}</TableCell>
                 <TableCell component="th" scope="row">
                     {row.id}
                 </TableCell>
                 <TableCell align="right">{row.title}</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
                 <TableCell align="right">{row.authorId}</TableCell>
-                <TableCell align="right">{renderBookCover()}</TableCell>
+                
                 <TableCell align="right">
                     <Button variant="outlined" onClick={() => handleDeleteBookTitle(row.id, row.authorId)}>
                         delete
@@ -220,14 +250,28 @@ const BookTitlePage = () => {
                             </Select>
                         </FormControl>
                     </Box>
+                    {(cover==='')?renderBookCover(curentId, covers):<Avatar alt="Cover" variant="square" src = {cover} ></Avatar>}
+                    <Button
+                        variant="contained"
+                        component="label"
+                        
+                    >
+                        Upload File
+                        <input
+                            accept="image/*"
+                            onChange={ e => handleChangeCover(e, curentId)}
+                            type="file"
+                            hidden
+                        />
+                    </Button>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={() => {
                             (curentId === '') ? 
-                            handleAdd(title, description, authorId) : 
-                            handleChange(curentId, title, description, authorId, prevAuthorId);
+                            handleAdd(title, description, authorId, cover) : 
+                            handleChange(curentId, title, description, authorId, prevAuthorId, cover);
                             
                         }}
                     >
@@ -239,6 +283,7 @@ const BookTitlePage = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
+                            <TableCell></TableCell>
                             <TableCell>ID</TableCell>
                             <TableCell align="right">title</TableCell>
                             <TableCell align="right">description</TableCell>
