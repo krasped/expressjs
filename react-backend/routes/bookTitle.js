@@ -11,7 +11,6 @@ const createBookTitle = function (req, res) {
             // authorId: req.body.authorId
         })
         .then((result) => {
-            console.log(result);
             res.json(result)
         })
         .catch((err) => console.log(err));
@@ -29,7 +28,6 @@ const getBookTitle = function (req, res) {
 const getAuthor = function (req, res) {
     db.AuthorBookTitle.findAll({ raw: true })
     .then((result) => {
-        console.log(result);
         return res.json(result);
     })
     .catch((err) => console.log(err));

@@ -12,7 +12,7 @@ const BookPage = () => {
     const bookTitleId = useSelector((state) => state.bookTitle.bookTitleId);
     const [open, setOpen] = useState(false);
     const [code, setCode] = useState("");
-    const [titleId, setTitleId] = useState(null);
+    const [titleId, setTitleId] = useState('');
     const [curentId, setCurentId] = useState('');
     const [message, setMesssage] = useState([]);
 
@@ -24,7 +24,7 @@ const BookPage = () => {
         setCode(event.target.value);
     };
 
-    const handleClickOpen = (message, code='', titleId='', curId='') => {
+    const handleClickOpen = (message, code = '', titleId = '', curId = '') => {
         setCode(code);
         setTitleId(titleId);
         setMesssage(message);
@@ -40,8 +40,13 @@ const BookPage = () => {
         setOpen(false);
     };
 
+    const isEmptyReturnNull = (str) => {
+        return (str==='') ? null: str;
+    }
+
     const handleAdd = async (code, titleId) => {
-        await got.postResource("book", { code: code, booksTitleId: titleId } );
+        await got.postResource("book", { code: code, booksTitleId: isEmptyReturnNull(titleId) } );
+        updateTable();
         handleClose();
     };
 
@@ -51,7 +56,8 @@ const BookPage = () => {
     }
 
     const handleChange = async (id, code, titleId) => {
-        await got.postResource("book/change", { bookId: id, code: code, titleId: titleId } );
+        await got.postResource("book/change", { bookId: id, code: code, titleId: isEmptyReturnNull(titleId) } );
+        updateTable();
         handleClose();
     }
 
@@ -122,7 +128,6 @@ const BookPage = () => {
 
     useEffect(() => {
         updateTable();
-        // updateBookTitleId();
     }, []);
 
     return (
@@ -157,7 +162,7 @@ const BookPage = () => {
                             <Select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
-                                value={!titleId ? "" : titleId}
+                                value={!titleId ? '' : titleId}
                                 label="titleId"
                                 onChange={handleChangeTitleId}
                             >

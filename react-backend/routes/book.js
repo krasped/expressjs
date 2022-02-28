@@ -43,12 +43,10 @@ const getAuthor = function (req, res) {
     .then((bookTitleId) => {
         return db.AuthorBookTitle.findAll({ raw: true })
         .then((author) => {
-            console.log(author);
             let book_author = [];
             bookTitleId.forEach((book) => {
                 let authorId = [];
                 author.forEach((authorBook) => {
-                    console.log(book.bookTitleId,authorBook.authorId)
                     if (book.bookTitleId === authorBook.bookTitleId) {
                         authorId.push(authorBook.authorId);
                     }
@@ -65,7 +63,6 @@ const getAuthor = function (req, res) {
         .catch((err) => console.log(err));
     })
     .then((result) => {
-        console.log(result);
         res.json(result);
     })
     .catch((err) => console.log(err));

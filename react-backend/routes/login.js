@@ -43,7 +43,6 @@ const registrateUser = function (req, res) {
             password: bcryptPassword(req.body.password)
         })
         .then((data) => {
-            console.log(data);
             res.json(data);
         })
         .catch((err) => console.log(err));
