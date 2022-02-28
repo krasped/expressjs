@@ -34,6 +34,7 @@ const BookTitlePage = () => {
         setMesssage(message);
         setCurentId(curId);
         setPrevAuthorId(prevAuthorId);
+        setAuthorId(prevAuthorId);
         setOpen(true);
     };
 
@@ -46,6 +47,10 @@ const BookTitlePage = () => {
         setCover("");
         setOpen(false);
     };
+
+    const isEmptyReturnNull = (str) => {
+        return (str==='') ? null: str;
+    }
 
     const handleAdd = async (title, description, authorId, cover) => {
         let curBookTitleId;
@@ -82,24 +87,28 @@ const BookTitlePage = () => {
         cover,
     ) => {
         if (prevAuthorId === null && authorId !== null) {
+            console.log(1);
             await got.postResource("authorBookTitle", {
                 authorId: authorId,
                 bookTitleId: curId,
             });
         }
         if (prevAuthorId !== null && authorId === null) {
+            console.log(2);
             await got.postResource("authorBookTitle/delete", {
                 authorId: prevAuthorId,
                 bookTitleId: curId,
             });
         }
         if (prevAuthorId !== null && authorId !== null) {
+            console.log(3);
             await got.postResource("authorBookTitle/change", {
-                authorId: authorId,
+                authorId: isEmptyReturnNull(authorId),
                 prevAuthorId: prevAuthorId,
                 bookTitleId: curId,
             });
         }
+        console.log(4);
         await got.postResource("bookTitle/change", {
             bookTitleId: curId,
             title: title,
