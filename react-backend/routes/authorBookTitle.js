@@ -43,7 +43,7 @@ const deleteAuthorBookTitle = function (req, res) {
     db.AuthorBookTitle
         .destroy({
             where: {
-                authorId: req.body.prevAuthorId,
+                authorId: req.body.authorId,
                 bookTitleId: req.body.bookTitleId
             }
         })

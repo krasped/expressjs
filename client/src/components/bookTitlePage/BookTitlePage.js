@@ -93,8 +93,8 @@ const BookTitlePage = () => {
                 bookTitleId: curId,
             });
         }
-        if (prevAuthorId !== null && authorId === null) {
-            console.log(2);
+        if (prevAuthorId !== null && isEmptyReturnNull(authorId) === null) {
+            console.log(2, prevAuthorId);
             await got.postResource("authorBookTitle/delete", {
                 authorId: prevAuthorId,
                 bookTitleId: curId,
